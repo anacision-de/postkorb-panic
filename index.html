@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Enable fullscreen standalone mode -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- Set app title on Home Screen -->
+  <meta name="apple-mobile-web-app-title" content="KI Spiel">
   <title>KI Spiel</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
   <link rel="stylesheet" href="css/base.css" />
@@ -175,19 +179,21 @@
     </div>
 
     <!-- Abteilungs-Buttons -->
-    <p class="instruction">Tippen Sie auf die richtige Abteilung zur Weiterleitung:</p>
-    <div class="department-section">
-      <div class="departments">
-        <template x-for="dept in departments" :key="dept.name">
-          <button class="dept-btn" 
-                  :class="{'suggestion': aiMode && dept.name === currentDoc.aiSuggestion}" 
-                  :data-name="dept.name"
-                  @click="selectDepartment(dept.name)">
-            <span class="dept-icon" x-text="dept.icon"></span>
-            <span x-text="dept.name"></span>
-            <span class="ki-hint" x-show="aiMode && dept.name === currentDoc.aiSuggestion">KI-Vorschlag</span>
-          </button>
-        </template>
+    <div class="footer-controls"></div>
+      <p class="instruction">Tippen Sie auf die richtige Abteilung zur Weiterleitung:</p>
+      <div class="department-section">
+        <div class="departments">
+          <template x-for="dept in departments" :key="dept.name">
+            <button class="dept-btn" 
+                    :class="{'suggestion': aiMode && dept.name === currentDoc.aiSuggestion}" 
+                    :data-name="dept.name"
+                    @click="selectDepartment(dept.name)">
+              <span class="dept-icon" x-text="dept.icon"></span>
+              <span x-text="dept.name"></span>
+              <span class="ki-hint" x-show="aiMode && dept.name === currentDoc.aiSuggestion">KI-Vorschlag</span>
+            </button>
+          </template>
+        </div>
       </div>
     </div>
   </div>
