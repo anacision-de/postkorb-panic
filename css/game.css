@@ -1,0 +1,134 @@
+/* Styles for the Game screen (playing interface) */
+.game-screen {
+  background: #333;
+  color: #fff;
+  position: relative;
+}
+
+/* Status bar (time, score, AI mode) */
+.game-status {
+  display: flex;
+  justify-content: space-around;
+  background: #222;
+  padding: 10px;
+  font-size: 1.8rem;
+}
+.game-status span {
+  margin: 0 5px;
+}
+
+/* Email card (incoming email content) */
+.email-card {
+  background: #fff;
+  color: #000;
+  width: 70%;
+  max-height: 80vh;
+  overflow-y: auto;
+  margin: 0 auto;
+  padding: 5em;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.email-meta {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: #555;
+}
+.email-body {
+  font-size: 1rem;
+  white-space: pre-line;
+}
+.email-body mark {
+  background: #ffff00;
+}
+
+/* Progress bar */
+.progress-container {
+  width: 100%;
+  margin: 20px auto 10px;
+  text-align: center;
+}
+.progress-bar {
+  background: #ddd;
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.progress-fill {
+  height: 100%;
+  background: #f1c40f;
+  transition: width 0.3s ease;
+}
+.progress-text {
+  font-size: 1.5rem;
+  color: #eee;
+}
+
+/* Department selection buttons */
+.departments {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+}
+.dept-btn {
+  font-size: 1vw;
+  padding: 15px 30px;
+  background: rgb(245, 218, 137);
+  border: 2px solid #f1c40f;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 10px;
+  width: 18%;
+  height: 8rem;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.dept-btn:active {
+  transform: scale(0.98);
+}
+.dept-icon {
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 5px;
+}
+.dept-btn.suggestion {
+  border-color: #f7a307;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+}
+.dept-btn .ki-hint {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #f1c40f;
+  color: #000;
+  font-size: 0.7rem;
+  padding: 0.1em 0.1em;
+  border-radius: 3px;
+}
+
+/* Blink animations for correct/wrong selection */
+@keyframes blink-green {
+  0%, 100% { background-color: rgb(245, 218, 137); }
+  50% { background-color: #2ecc71; }
+}
+@keyframes blink-red {
+  0%, 100% { background-color: rgb(245, 218, 137); }
+  50% { background-color: #e74c3c; }
+}
+.dept-btn.correct-blink {
+  animation: blink-green 1s ease-in-out 3;
+}
+.dept-btn.wrong-blink {
+  animation: blink-red 1s ease-in-out 3;
+}
+
+/* Disabled state for buttons during blink */
+.dept-btn.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}

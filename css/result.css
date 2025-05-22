@@ -1,0 +1,50 @@
+/* Styles for the Result screen (score summary and form) */
+.result-values {
+  margin-bottom: 10px;
+  padding: 10px 0;
+}
+.result-values p {
+  margin: 0;
+  color: #fff;
+}
+.idle-note {
+  font-size: 1.5rem;
+  color: #f0f0f0;
+  text-align: center;
+}
+.consent-wrap {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  color: #eee;
+  font-size: 1.7rem;
+  line-height: 1.4;
+  margin-top: 10px;
+}
+.consent-wrap input[type="checkbox"] {
+  transform: scale(1.2);
+  align-self: start;
+}
+/* Answers comparison table */
+.answers-compare {
+  margin-top: 20px;
+}
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 2rem;
+}
+.compare-table th, .compare-table td {
+  border: 1px solid #aaa;
+  padding: 4px 6px;
+  text-align: center;
+}
+.compare-table th {
+  background: #ddd;
+}
+.compare-table tr.correct {
+  background: #d4efdf;
+}
+.compare-table tr.wrong {
+  background: #f9ebea;
+}

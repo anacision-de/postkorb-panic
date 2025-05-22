@@ -1,28 +1,297 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zukunftskongress 2025</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KI Spiel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/start.css" />
+  <link rel="stylesheet" href="css/game.css" />
+  <link rel="stylesheet" href="css/result.css" />
+  <script defer src="./app.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body>
-    <section>
-        <h1>Abschnitt 1</h1>
-        <p>Erklärung des Spiels, Statistiken, Start-Button etc.</p>
-    </section>
+<body x-data="window.appData()" x-init="initApp()" class="app">
 
-    <section>
-        <h1>Abschnitt 2</h1>
-        <p>Spiel selbst mit Einordnung der Dokumente in Kategorien</p>
-    </section>
+  <!-- Start Screen -->
+  <div x-show="screen === 'start'" x-cloak class="screen start-screen">
+    <div class="start-left">
+      <h1>Hand in Hand mit KI! 🤖</h1>
+      <p>Ihre Aufgabe: Postkorb bearbeiten</p>
+      <p>Noch irgendwelche Infos?</p>
 
-    <section>
-        <h1>Abschnitt 3</h1>
-        <p>Endergebnis, Statistiken, Formular zum Eintragen von Kontaktdaten</p>
-    </section>
+      <div class="result-buttons">
+        <p class="cta">Möchten Sie Ihr Können unter Beweis stellen?</p>
+        <button class="start-btn" @click="screen = 'setup'">Start</button>
+      </div>
+    </div>
+    <!-- Rechte Seite: Bestenliste & Statistik -->
+    <div class="start-right">
+      <h2>Bestenliste 🏆</h2>
+      <table class="leaderboard">
+        <thead>
+          <tr><th>#</th><th>Name</th><th>Zeit</th><th>Korrekt</th><th>Score</th><th>KI</th></tr>
+        </thead>
+        <tbody>
+          <template x-if="leaderboard.length === 0">
+            <tr><td colspan="6" class="no-data">Noch keine Daten</td></tr>
+          </template>
+          <template x-for="(entry, idx) in leaderboard" :key="idx">
+            <tr>
+              <td x-text="idx+1"></td>
+              <td x-text="entry.name ?? '–'"></td>
+              <td x-text="formatTime(entry.time)"></td>
+              <td x-text="entry.correct"></td>
+              <td x-text="entry.score"></td>
+              <td x-text="entry.ai ? 'an' : 'aus'"></td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+      <div class="stats">
+        <h2>Statistiken</h2>
+        <!-- Streudiagramm (SVG) -->
+        <div class="scatter-container">
+          <svg class="scatter-plot" viewBox="-60 -20 720 370" preserveAspectRatio="xMinYMin meet">
+            <!-- Grid Lines -->
+            <g x-html="generateGrid()"></g>
+            <!-- Axes -->
+            <line x1="0" y1="300" x2="600" y2="300" class="axis" />  
+            <line x1="0" y1="0" x2="0" y2="300" class="axis" />       
+            <!-- Axis Labels -->
+            <text x="280" y="335" class="axis-label">Zeit in Sekunden</text>
+            <text x="-40" y="200" class="axis-label" transform="rotate(-90 -40 200)">Korrekte Zuordnungen</text>
+            <!-- Ticks -->
+            <g x-html="generateTicks()"></g>
+            <!-- Data Points -->
+            <g x-html="generateCircles()"></g>
+          </svg>
+        </div>
+      </div>
+      <div class="logo" @click="promptAdmin()">
+        <img src="./images/logo_schwarz.png" alt="Logo" class="logo-img" />
+      </div>
+    </div>
+  </div>
 
-    <script src="script.js"></script>
+  <!-- Erklärung/Setup Screen -->
+  <div x-show="screen === 'setup'" x-transition class="screen start-screen">
+    <div class="start-left">
+      <h2>Erklärung</h2>
+      <p>Sortieren Sie 10 eingehende E-Mails so schnell wie möglich der richtigen Abteilung zu.</p>
+      <h2>Vor dem Start</h2>
+      <p>Bitte geben Sie einen Spielernamen ein. Dieser wird in der Bestenliste angezeigt:</p>
+      <input type="text" placeholder="Spielername" x-model="playerName" />
+
+      <div class="ki-toggle">
+        <p>Wollen KI-Unterstützung erhalten? Sie markiert Schlüsselwörter und macht einen Vorschlag für die korrekte Weiterleitung. 
+        <strong>WICHTIG:</strong> Sie haben das letzte Wort, denn die KI kann sich auch manchmal irren!</p>
+        <label class="slider-label">
+          KI-Unterstützung:
+          <input type="checkbox" x-model="aiMode" class="slider-checkbox" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <p x-show="aiMode" class="highlight-yellow">
+        Mit aktiviertem KI-Modus sehen Sie unten eine Vorschau, wie Begriffe markiert und Vorschläge gemacht werden.
+      </p>
+      <div class="result-buttons">
+        <button class="start-btn" @click="startGame()">Los!</button>
+      </div>
+    </div>
+
+    <div class="start-right">
+      <h3>So funktioniert das Spiel</h3>
+      <p>Sie sehen eine eingehende E-Mail und entscheiden, an welche Abteilung sie weitergeleitet werden soll.</p>
+      <ul>
+        <li>👥 <strong>Personalabteilung</strong>: Bewerbung, Lebenslauf, etc.</li>
+        <li>💰 <strong>Finanzabteilung</strong>: Rechnungen, Zahlungen</li>
+        <li>⚖️ <strong>Rechtsabteilung</strong>: Verträge, juristische Fragen</li>
+        <li>👔 <strong>Leitungsebene</strong>: Strategische Entscheidungen, Eskalationen</li>
+        <li>🎧 <strong>Kundenservice</strong>: Beschwerden, Fragen, Rückmeldungen</li>
+      </ul>
+      <h3>Beispiel E-Mail</h3>
+      <div class="email-card">
+        <div class="email-meta">
+          <div><strong>Von:</strong> <span x-text="docs[0]?.from || '–'"></span></div>
+          <div><strong>An:</strong> <span x-text="docs[0]?.to || '–'"></span></div>
+        </div>
+        <div class="email-body">
+          <p x-show="!aiMode" x-text="docs[0]?.body"></p>
+          <p x-show="aiMode" x-html="docs[0]?.highlightedBody"></p>
+        </div>
+      </div>
+      <p class="instruction">Tippen Sie auf die richtige Abteilung zur Weiterleitung:</p>
+      <div class="department-section">
+        <div class="departments">
+          <template x-for="dept in departments" :key="dept.name">
+            <button class="dept-btn" 
+                    :class="{'suggestion': aiMode && dept.name === docs[0]?.aiSuggestion}"
+                    :data-name="dept.name"
+                    @click="blinkDemoDept(dept.name)">
+              <span class="dept-icon" x-text="dept.icon"></span>
+              <span x-text="dept.name"></span>
+              <span class="ki-hint" x-show="aiMode && dept.name === docs[0]?.aiSuggestion">KI-Vorschlag</span>
+            </button>
+          </template>
+        </div>
+      </div>
+      <div class="logo">
+        <img src="./images/logo_schwarz.png" alt="Logo" class="logo-img" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Spiel (Game) Screen -->
+  <div x-show="screen === 'game'" x-transition class="screen game-screen">
+    <!-- Laufende Zeit & Score Anzeige -->
+    <div class="game-status">
+      <span>Zeit: <strong x-text="formatTime(timeElapsed)"></strong></span>
+      <span>Score: <strong x-text="currentScore"></strong></span>
+      <span>KI-Modus: <strong x-text="aiMode ? 'an' : 'aus'"></strong></span>
+    </div>
+
+    <!-- Fortschrittsbalken -->
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" :style="`width: ${(currentIndex + 1) / docs.length * 100}%`"></div>
+      </div>
+      <span class="progress-text" x-text="`Dokument ${currentIndex + 1} von ${docs.length}`"></span>
+    </div>
+
+    <!-- E-Mail Karte -->
+    <div class="card-stack">
+      <div class="email-card">
+        <div class="email-meta">
+          <div><strong>Von:</strong> <span x-text="currentDoc.from"></span></div>
+          <div><strong>An:</strong> <span x-text="currentDoc.to"></span></div>
+        </div>
+        <div class="email-body">
+          <p x-show="!aiMode" x-text="currentDoc.body"></p>
+          <p x-show="aiMode" x-html="currentDoc.highlightedBody"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Abteilungs-Buttons -->
+    <p class="instruction">Tippen Sie auf die richtige Abteilung zur Weiterleitung:</p>
+    <div class="department-section">
+      <div class="departments">
+        <template x-for="dept in departments" :key="dept.name">
+          <button class="dept-btn" 
+                  :class="{'suggestion': aiMode && dept.name === currentDoc.aiSuggestion}" 
+                  :data-name="dept.name"
+                  @click="selectDepartment(dept.name)">
+            <span class="dept-icon" x-text="dept.icon"></span>
+            <span x-text="dept.name"></span>
+            <span class="ki-hint" x-show="aiMode && dept.name === currentDoc.aiSuggestion">KI-Vorschlag</span>
+          </button>
+        </template>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ergebnis (Result) Screen -->
+  <div x-show="screen === 'result'" x-transition class="screen start-screen">
+    <div class="start-left">
+      <h2>Geschafft! 😊</h2>
+      <div class="result-values">
+        <p x-show="currentResult">⏱️ Benötigte Zeit: <strong x-text="formatTime(currentResult?.time)"></strong></p>
+        <p x-show="currentResult">✅ Korrekte Antworten: <strong x-text="currentResult?.correct + '/10'"></strong></p>
+        <p x-show="currentResult">🏆 Score: <strong x-text="currentResult?.score"></strong></p>
+      </div>
+      <p x-show="percentile !== null">
+        Sie sind mit Ihrem Score besser als <strong x-text="percentile"></strong>% aller bisherigen Teilnehmenden!
+      </p>
+      <p class="highlight-yellow">
+        Tragen Sie hier Ihren Namen und Ihre E-Mail-Adresse ein. Unter allen Teilnehmenden verlosen wir einen Preis!
+      </p>
+      <!-- Formular für Name/Email -->
+      <div class="form">
+        <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" />
+        <div class="consent-wrap">
+          <input type="checkbox" x-model="playerConsent" id="consentCheck" />
+          <label for="consentCheck">
+            Ich bin damit einverstanden, dass mich die anacision GmbH zur Bearbeitung des Gewinnspiels sowie zum Zweck der geschäftlichen Kontaktaufnahme inkl. der Information zu Produkten und Dienstleistungen per E-Mail kontaktiert.
+          </label>
+        </div>
+      </div>
+      <div class="result-buttons">
+        <button class="start-btn" @click="submitScore()">Absenden &amp; zum Start!</button>
+        <span class="idle-note">(Automatisches Zurückkehren in <span x-text="idleTimeoutSeconds"></span>s)</span>
+      </div>
+    </div>
+    <div class="start-right">
+      <!-- Bestenliste und Statistik wie im Startscreen -->
+      <h2>Bestenliste 🏆</h2>
+      <table class="leaderboard">
+        <thead>
+          <tr><th>#</th><th>Name</th><th>Zeit</th><th>Korrekt</th><th>Score</th><th>KI</th></tr>
+        </thead>
+        <tbody>
+          <template x-if="leaderboard.length === 0">
+            <tr><td colspan="6" class="no-data">Noch keine Daten</td></tr>
+          </template>
+          <template x-for="(entry, idx) in leaderboard" :key="entry.name+idx">
+            <tr :class="{highlight: currentResult && entry === currentResult}">
+              <td x-text="idx+1"></td>
+              <td x-text="entry.name ?? (entry === currentResult ? 'Ihr Score' : '–')"></td>
+              <td x-text="formatTime(entry.time)"></td>
+              <td x-text="entry.correct"></td>
+              <td x-text="entry.score"></td>
+              <td x-text="entry.ai ? 'an' : 'aus'"></td>
+            </tr>
+          </template>
+          <!-- Falls aktueller Score nicht in Top 5, eigene Zeile anzeigen -->
+          <template x-if="rank && rank > leaderboard.length">
+            <tr class="highlight">
+              <td x-text="rank"></td>
+              <td>Ihr Score</td>
+              <td x-text="formatTime(currentResult.time)"></td>
+              <td x-text="currentResult.correct"></td>
+              <td x-text="currentResult.score"></td>
+              <td x-text="currentResult.ai ? 'an' : 'aus'"></td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+      <!-- Antworten-Vergleich Tabelle -->
+      <div class="answers-compare">
+        <h3>Antworten vergleichen</h3>
+        <table class="compare-table">
+          <thead>
+            <tr><th>#</th><th>Abteilung (richtig)</th><th>Ihre Antwort</th><th>KI-Vorschlag</th></tr>
+          </thead>
+          <tbody>
+            <template x-for="(doc, i) in docs" :key="i">
+              <tr :class="{correct: doc.userAnswer === doc.correctDept, wrong: doc.userAnswer !== doc.correctDept}">
+                <td x-text="i+1"></td>
+                <td x-text="doc.correctDept"></td>
+                <td x-text="doc.userAnswer ?? '–'"></td>
+                <td x-text="doc.aiSuggestion"></td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+      <div class="logo">
+        <img src="./images/logo_schwarz.png" alt="Logo" class="logo-img" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin-Daten Modal (passwortgeschützt) -->
+  <div class="modal" x-show="showDataModal">
+    <div class="modal-content">
+      <h3>Gespeicherte Daten <button @click="showDataModal=false" class="close-btn">×</button></h3>
+      <p><em>Zum Herunterladen der Email-Adressen klicken</em></p>
+      <div class="result-buttons">
+        <button class=start-btn @click="downloadSummary()">Txt herunterladen</button>
+        <button class=start-btn @click="downloadCSV()">CSV herunterladen</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
