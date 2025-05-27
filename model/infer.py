@@ -1,6 +1,6 @@
 import argparse
 import json
-from typing import Iterable, List, Tuple
+from typing import Iterable, List, Optional, Tuple
 
 import pandas as pd
 from config import BASE_MODEL_NAME, DEVICE, FINETUNED_MODEL_PATH
@@ -11,13 +11,12 @@ from transformers import (
 )
 from transformers_interpret import SequenceClassificationExplainer
 
-model = AutoModelForSequenceClassification.from_pretrained(FINETUNED_MODEL_PATH).to(DEVICE)
-tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL_NAME)
-explainer = SequenceClassificationExplainer(
-    model,
-    tokenizer,
-    attribution_type="lig"
+model = AutoModelForSequenceClassification.from_pretrained(FINETUNED_MODEL_PATH).to(
+    DEVICE
 )
+tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL_NAME)
+explainer = SequenceClassificationExplainer(model, tokenizer, attribution_type="lig")
+
 
 def infer_and_explain(args):
     df = pd.read_json(args.json, orient="records")
@@ -27,16 +26,18 @@ def infer_and_explain(args):
         id2label = {v: k for k, v in label2id.items()}
 
     preds = []
-    for _, row in tqdm(df.iterrows(), total=len(df)): # type: ignore
+    for _, row in tqdm(df.iterrows(), total=len(df)):  # type: ignore
         text = row["text"]
         word_attributions = explainer(text, internal_batch_size=4)
 
-        pred = id2label[explainer.predicted_class_index.item()] # type: ignore
+        pred = id2label[explainer.predicted_class_index.item()]  # type: ignore
 
-        preds.append({
-            "prediction": pred,
-            "highlights": _attribution_to_html(text, word_attributions),
-        })
+        preds.append(
+            {
+                "prediction": pred,
+                "highlights": _attribution_to_html(text, word_attributions),
+            }
+        )
 
     preds = pd.DataFrame(preds, index=df.index)
     df = pd.concat([df, preds], axis=1)
@@ -47,99 +48,156 @@ def _attribution_to_html(text: str, attribution: list[tuple[str, float]]) -> str
     attributions = [t for t in attribution if t[0] not in ["[CLS]", "[SEP]", "[PAD]"]]
     attributions = _align_wordpiece_tokens(text, attribution)
 
+    # Sort attributions based on the score value in descending order
+    sorted_attributions = sorted(attributions, key=lambda x: x[1] or 0, reverse=True)  # type: ignore
+    max_score = max([a[1] for a in attributions if a[1]])
+
+    # Get the top N attributions if their score is higher than T
+    N = 10  # Define the maximum number of top attributions you want
+    T = 0.35  # Define the (normalized) threshold score
+
+    top_attributions = {
+        attr for attr in sorted_attributions[:N] if attr[1] and attr[1] / max_score >= T
+    }
+
     html = []
     for word, score in attributions:
-        # TODO: Find best threshold!
-        if score >= 0.1:
+        if (word, score) in top_attributions:
             html.append(f"<span class='mark'>{word}</span>")
         else:
             html.append(word)
-    
+
     return "".join(html)
 
 
+_SPECIAL = {"[CLS]", "[SEP]", "[PAD]", "[MASK]", "[UNK]"}
 
-SPECIAL_TOKEN_BRACKETS = {"[CLS]", "[SEP]", "[PAD]", "[MASK]", "[UNK]"}
 
 def _align_wordpiece_tokens(
     original_text: str,
     token_score_pairs: Iterable[Tuple[str, float]],
     *,
     keep_special: bool = False,
-) -> List[Tuple[str, float]]:
+) -> List[Tuple[str, Optional[float]]]:
     """
-    Re-attaches whitespace *and* any intervening punctuation that the tokenizer
-    skipped (e.g. „ or “) to WordPiece tokens, so that re-concatenation yields
-    the exact `original_text`.
+    Re-attaches *separate* whitespace tokens and collapses multi-piece WordPiece
+    words into single entries using the **maximum** score of their parts.
+
+    Whitespace tokens receive a score of `None`.
+
+    Parameters
+    ----------
+    original_text : str
+        Exact text that went through the tokenizer.
+    token_score_pairs : iterable[(str, float)]
+        Model output: plain WordPiece tokens plus their scores.
+    keep_special : bool, default False
+        Keep BERT wrapper tokens like [CLS] (mapped to empty text).  When kept,
+        their score is preserved; otherwise they are dropped.
 
     Returns
     -------
-    aligned_pairs : list[(str, float)]
-        Same length as the filtered token list, but each token now carries its
-        original leading whitespace/punctuation.
+    aligned_pairs : list[(str, Optional[float])]
+        Tokens exactly covering `original_text`, ready for highlighting.
     """
     ptr, n = 0, len(original_text)
-    aligned_tokens: List[str] = []
-    aligned_pairs: List[Tuple[str, float]] = []
+    out: List[Tuple[str, Optional[float]]] = []
+
+    # State for an ongoing multi-piece word
+    word_buf: List[str] = []
+    word_max: Optional[float] = None
+
+    def flush_word():
+        nonlocal word_buf, word_max
+        if word_buf:
+            full_word = "".join(word_buf)
+            out.append((full_word, word_max))
+            word_buf, word_max = [], None
 
     for tok, score in token_score_pairs:
-        # 1) drop or keep wrapper tokens like [CLS] / [SEP]
-        if tok in SPECIAL_TOKEN_BRACKETS or (tok.startswith("[") and tok.endswith("]")):
+        # ------------------------------------------------- special tokens ----
+        if tok in _SPECIAL or (tok.startswith("[") and tok.endswith("]")):
+            flush_word()
             if keep_special:
-                aligned_pairs.append(("", score))
+                out.append(("", score))
             continue
 
+        # ------------------------------------------------- literal fragment --
         literal = tok[2:] if tok.startswith("##") else tok
 
-        # 2) gather *whitespace* first
-        prefix = ""
+        # ------------------------------------------------- leading whitespace
         if not tok.startswith("##"):
+            # any spaces/newlines *before* the next visible char
+            ws_start = ptr
             while ptr < n and original_text[ptr].isspace():
-                prefix += original_text[ptr]
                 ptr += 1
+            if ptr > ws_start:  # at least one whitespace char
+                flush_word()
+                out.append((original_text[ws_start:ptr], None))
 
-            # 3) if literal does not start here, absorb non-whitespace chars
-            #    that the tokenizer chose to ignore (e.g. „, “, «, » …)
+            # ------------------------------------------------ missing chars --
             if not original_text.startswith(literal, ptr):
-                # find first subsequent match of the literal
+                # swallow everything up to the literal (e.g. „, “, «, » ...)
+                extra_start = ptr
                 idx = original_text.find(literal, ptr)
                 if idx == -1:
+                    snippet = original_text[ptr : ptr + 20].replace("\n", "\\n")
                     raise ValueError(
-                        f"Expected '{literal}' after position {ptr}, "
-                        f"but it never appears."
+                        f"Expected '{literal}' after pos {ptr}, saw '{snippet}'."
                     )
-                prefix += original_text[ptr:idx]
-                ptr = idx  # now literal starts at ptr
+                flush_word()
+                out.append((original_text[extra_start:idx], None))
+                ptr = idx
 
-        # 4) sanity-check (still fails only on true mis-alignments)
+        # ------------------------------------------------- sanity-check ------
         if not original_text.startswith(literal, ptr):
-            snippet = original_text[ptr:ptr + 20].replace("\n", "\\n")
-            raise ValueError(
-                f"Expected '{literal}' at position {ptr}, but saw '{snippet}'."
-            )
+            snippet = original_text[ptr : ptr + 20].replace("\n", "\\n")
+            raise ValueError(f"Expected '{literal}' at pos {ptr}, saw '{snippet}'.")
 
+        # ------------------------------------------------- advance & collect -
+        frag = original_text[ptr : ptr + len(literal)]
         ptr += len(literal)
-        full_token = prefix + literal
-        aligned_tokens.append(full_token)
-        aligned_pairs.append((full_token, score))
 
-    # 5) attach any trailing whitespace at the very end of the text
-    if ptr < n:
-        aligned_tokens[-1] += original_text[ptr:]
-        tok, sc = aligned_pairs[-1]
-        aligned_pairs[-1] = (aligned_tokens[-1], sc)
+        if tok.startswith("##"):  # continuation of current word
+            if not word_buf:  # shouldn't happen
+                raise AssertionError("Sub-token without a word start.")
+            word_buf.append(frag)
+            word_max = max(word_max, score) if word_max is not None else score
+        else:  # new word or punctuation
+            flush_word()
+            # treat lone punctuation (comma, dot, etc.) as its own token
+            if len(frag) == 1 and not frag.isalnum():
+                out.append((frag, score))
+            else:  # start new word
+                word_buf = [frag]
+                word_max = score
 
-    # 6) final integrity check
-    if "".join(aligned_tokens) != original_text:
+    # ------------------------------------------ flush leftovers & trailing ws
+    flush_word()
+    if ptr < n:  # trailing whitespace at EOF
+        out.append((original_text[ptr:], None))
+
+    # ------------------------------------------ integrity check -------------
+    if "".join(tok for tok, _ in out) != original_text:
         raise AssertionError("Alignment failed: reconstructed text differs.")
 
-    return aligned_pairs
+    return out
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--json", type=str, default="../data/test.json", help="Path to JSON with a list of objects containing 'text' and 'label' columns. 'label' is only used for writing later.")
-    parser.add_argument("--out", type=str, default="../data/data.json", help="Path where the output JSON is written. It contains the text, label, prediction and highlighted text as HTML.")
+    parser.add_argument(
+        "--json",
+        type=str,
+        default="../data/test.json",
+        help="Path to JSON with a list of objects containing 'text' and 'label' columns. 'label' is only used for writing later.",
+    )
+    parser.add_argument(
+        "--out",
+        type=str,
+        default="../data/data.json",
+        help="Path where the output JSON is written. It contains the text, label, prediction and highlighted text as HTML.",
+    )
     args = parser.parse_args()
 
     infer_and_explain(args)

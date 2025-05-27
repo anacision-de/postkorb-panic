@@ -10,6 +10,7 @@ dependencies = [
     "datasets>=3.6.0",
     "evaluate>=0.4.3",
     "huggingface-hub[hf-xet]>=0.31.2",
+    "ipykernel>=6.29.5",
     "pytorch-lightning>=2.5.1.post0",
     "rich>=14.0.0",
     "shap>=0.47.2",
