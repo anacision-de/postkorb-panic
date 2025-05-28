@@ -3,5 +3,5 @@
 model/__pycache__
 model/.venv
 model/checkpoints
-model/german-bert-finetuned
 model/zuko-model
+model/moderngbert-model

@@ -66,5 +66,3 @@ if __name__ == "__main__":
         help="Path to JSON with a list of objects containing 'text' and 'label' columns.",
     )
     main(parser.parse_args())
-
-# TODO: Analysis how well the model works on the test dataset
