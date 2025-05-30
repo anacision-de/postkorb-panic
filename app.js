@@ -60,13 +60,18 @@ function appData() {
 
     // Spiel starten (neue Runde)
     startGame() {
-        const sampleSize = 10; // or however many per round
-        this.docs = this.shuffleArray(this.rawDocs).slice(0, sampleSize).map(d => ({
-          body: d.text,
-          highlightedBody: d.highlights,
-          correctDept: d.label,
-          aiSuggestion: d.prediction
-        }));
+      if (!this.playerName || this.playerName.trim() === '') {
+        alert("Bitte geben Sie einen Spielernamen ein, um fortzufahren.");
+        return;
+      }
+
+      const sampleSize = 10; // or however many per round
+      this.docs = this.shuffleArray(this.rawDocs).slice(0, sampleSize).map(d => ({
+        body: d.text,
+        highlightedBody: d.highlights,
+        correctDept: d.label,
+        aiSuggestion: d.prediction
+      }));
       // Status zurücksetzen
       this.currentIndex = 0;
       this.correctCount = 0;
