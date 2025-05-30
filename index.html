@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Enable fullscreen standalone mode -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <!-- Set app title on Home Screen -->
   <meta name="apple-mobile-web-app-title" content="Postkorb Panic">
   <title>Postkorb Panic</title>
@@ -48,10 +48,10 @@
             <tr>
               <td x-text="idx+1"></td>
               <td x-text="entry.name ?? '–'"></td>
-              <td x-text="formatTime(entry.time)"></td>
+              <td x-text="formatTime(entry.totalTime)"></td>
               <td x-text="entry.correct"></td>
               <td x-text="entry.score"></td>
-              <td x-text="entry.ai ? 'an' : 'aus'"></td>
+              <td x-text="entry.aiMode ? 'an' : 'aus'"></td>
             </tr>
           </template>
         </tbody>
@@ -121,8 +121,8 @@
       <h3>Beispiel E-Mail</h3>
       <div class="email-card">
         <div class="email-meta">
-          <div><strong>Von:</strong> <span x-text="docs[0]?.from || '–'"></span></div>
-          <div><strong>An:</strong> <span x-text="docs[0]?.to || '–'"></span></div>
+          <div><strong>Von:</strong> <span>user@outlook.de</span></div>
+          <div><strong>An:</strong> <span>verwaltung@postkorb.de"</span></div>
         </div>
         <div class="email-body">
           <p x-show="!aiMode" x-text="docs[0]?.body"></p>
@@ -171,12 +171,12 @@
     <div class="card-stack">
       <div class="email-card">
         <div class="email-meta">
-          <div><strong>Von:</strong> <span x-text="currentDoc.from"></span></div>
-          <div><strong>An:</strong> <span x-text="currentDoc.to"></span></div>
+          <div><strong>Von:</strong> <span>user@outlook.de</span></div>
+          <div><strong>An:</strong> <span>verwaltung@postkorb.de"</span></div>
         </div>
         <div class="email-body">
           <p x-show="!aiMode" x-text="currentDoc.body"></p>
-          <p x-show="aiMode" x-html="currentDoc.highlightedBody"></p>
+          <p x-show="aiMode" x-html="highlightedHtml(currentDoc.highlightedBody)"></p>
         </div>
       </div>
     </div>
@@ -206,7 +206,7 @@
     <div class="start-left">
       <h2>Geschafft! 😊</h2>
       <div class="result-values">
-        <p x-show="currentResult">⏱️ Benötigte Zeit: <strong x-text="formatTime(currentResult?.time)"></strong></p>
+        <p x-show="currentResult">⏱️ Benötigte Zeit: <strong x-text="formatTime(currentResult?.totalTime)"></strong></p>
         <p x-show="currentResult">✅ Korrekte Antworten: <strong x-text="currentResult?.correct + '/10'"></strong></p>
         <p x-show="currentResult">🏆 Score: <strong x-text="currentResult?.score"></strong></p>
       </div>
@@ -227,8 +227,7 @@
         </div>
       </div>
       <div class="result-buttons">
-        <button class="start-btn" @click="submitScore()">Absenden &amp; zum Start!</button>
-        <span class="idle-note">(Automatisches Zurückkehren in <span x-text="idleTimeoutSeconds"></span>s)</span>
+        <button class="start-btn" @click="backToStart()">Absenden &amp; zum Start!</button>
       </div>
     </div>
     <div class="start-right">
@@ -245,11 +244,11 @@
           <template x-for="(entry, idx) in leaderboard" :key="entry.name+idx">
             <tr :class="{highlight: currentResult && entry === currentResult}">
               <td x-text="idx+1"></td>
-              <td x-text="entry.name ?? (entry === currentResult ? 'Ihr Score' : '–')"></td>
-              <td x-text="formatTime(entry.time)"></td>
+              <td x-text="entry.name ?? (entry === currentResult ? 'entry.name' : '–')"></td>
+              <td x-text="formatTime(entry.totalTime)"></td>
               <td x-text="entry.correct"></td>
               <td x-text="entry.score"></td>
-              <td x-text="entry.ai ? 'an' : 'aus'"></td>
+              <td x-text="entry.aiMode ? 'an' : 'aus'"></td>
             </tr>
           </template>
           <!-- Falls aktueller Score nicht in Top 5, eigene Zeile anzeigen -->
@@ -296,7 +295,6 @@
       <h3>Gespeicherte Daten <button @click="showDataModal=false" class="close-btn">×</button></h3>
       <p><em>Zum Herunterladen der Email-Adressen klicken</em></p>
       <div class="result-buttons">
-        <button class=start-btn @click="downloadSummary()">Txt herunterladen</button>
         <button class=start-btn @click="downloadCSV()">CSV herunterladen</button>
       </div>
     </div>
