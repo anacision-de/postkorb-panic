@@ -26,7 +26,7 @@ function appData() {
     // Flag für Antworten-Vergleich (Ergebnisansicht)
     showAnswers: false,
     // Konstanten
-    maxTime: 120,       // maximale Zeit (Sekunden) für Diagramm X-Achse
+    maxTime: 300,       // maximale Zeit (Sekunden) für Diagramm X-Achse
     maxCorrect: 10,     // maximale korrekte Antworten (Y-Achse)
     scatterWidth: 600,
     scatterHeight: 300,
@@ -280,7 +280,7 @@ function appData() {
     generateCircles() {
       if (!Array.isArray(this.resultsList)) return '';
       return this.resultsList.map(res => {
-        const cx = Math.min(res.totalTime, this.maxTime) / this.maxTime * this.scatterWidth;
+        const cx = (res.totalTime / this.maxTime) * this.scatterWidth;
         const cy = this.scatterHeight - (res.correct / this.maxCorrect * this.scatterHeight);
         const fill = res.ai ? '#f1c40f' : '#333';
         return `<circle cx="${cx}" cy="${cy}" r="6" fill="${fill}" stroke="#555" opacity="0.9" />`;
@@ -289,8 +289,8 @@ function appData() {
     // Streudiagramm: Achsen-Ticks (SVG) generieren
     generateTicks() {
       const maxY = this.maxCorrect;
-      const maxX = Math.max(90, ...this.resultsList.map(r => r.time || 0));
-      const xStep = 30;
+      const maxX = Math.max(this.maxTime, ...this.resultsList.map(r => r.time || 0));
+      const xStep = 25;
       const yStep = 2;
       const ticks = [];
       // Y-Achse Ticks (horizontale Markierungen)
@@ -310,9 +310,9 @@ function appData() {
     // Streudiagramm: Gitterlinien (SVG) generieren
     generateGrid() {
       const maxY = this.maxCorrect;
-      const maxX = Math.max(90, ...this.resultsList.map(r => r.time || 0));
+      const maxX = Math.max(this.maxTime, ...this.resultsList.map(r => r.time || 0));
       const yStep = 2;
-      const xStep = 30;
+      const xStep = 25;
       const lines = [];
       // Horizontale Linien (Y-Achse)
       for (let y = 0; y <= maxY; y += yStep) {
@@ -351,30 +351,29 @@ function appData() {
       this.leaderboard = sorted.slice(0, 5);
     },
 
-    // Zusammenfassungstext der Ergebnisse erzeugen
-    generateSummaryText() {
-      return this.resultsList
-        .filter(r => r.consent)
-        .map(r => {
-          const d = new Date(r.date).toLocaleString();
-          return `Name: ${r.name || '–'}, Email: ${r.email || '–'}, Score: ${r.score}, Time: ${r.totalTime}s, Date: ${d}`;
-        })
-        .join('\n');
-    },
-
     // Ergebnisse als CSV herunterladen
     downloadCSV() {
-      const headers = ['Name', 'Email', 'Score', 'Time', 'Date'];
-      const rows = this.resultsList
-        .filter(r => r.consent)
-        .map(r => [
-          r.name || '–',
-          r.email || '–',
-          r.score,
-          r.totalTime,
-          new Date(r.date).toISOString()
-        ]);
+      if (!this.resultsList || this.resultsList.length === 0) return;
+
+      // Get all top-level keys from the first result
+      const headers = Object.keys(this.resultsList[0]);
+
+      // Create CSV rows
+      const rows = this.resultsList.map(entry =>
+        headers.map(key => {
+          const value = entry[key];
+          // Convert arrays/objects to JSON strings to store in CSV safely
+          if (typeof value === 'object') {
+            return JSON.stringify(value);
+          }
+          return value ?? ''; // default to empty string if null/undefined
+        })
+      );
+
+      // Join into CSV string
       const csvContent = [headers, ...rows].map(row => row.join(',')).join('\n');
+
+      // Trigger download
       const blob = new Blob([csvContent], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
