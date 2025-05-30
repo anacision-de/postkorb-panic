@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/start.css" />
+  <link rel="stylesheet" href="css/setup.css" />
   <link rel="stylesheet" href="css/game.css" />
   <link rel="stylesheet" href="css/result.css" />
   <script defer src="./app.js"></script>
@@ -119,7 +120,7 @@
         <li>🎧 <strong>Kundenservice</strong>: Beschwerden, Fragen, Rückmeldungen</li>
       </ul>
       <h3>Beispiel E-Mail</h3>
-      <div class="email-card">
+      <div class="email-card-setup">
         <div class="email-meta">
           <div><strong>Von:</strong> <span>user@outlook.de</span></div>
           <div><strong>An:</strong> <span>verwaltung@postkorb.de"</span></div>
@@ -282,6 +283,28 @@
             </template>
           </tbody>
         </table>
+      </div>
+      <div class="doc-review" x-show="reviewDocs.length > 0">
+        <div class="doc-nav">
+          <button @click="prevDoc" :disabled="reviewIndex <= 0">⬅</button>
+          <span x-text="`Dokument ${reviewIndex + 1} von ${reviewDocs.length}`"></span>
+          <button @click="nextDoc" :disabled="reviewIndex >= reviewDocs.length - 1">➡</button>
+        </div>
+
+        <div class="doc-card">
+          <div class="email-meta">
+            <div><strong>Von:</strong> user@outlook.de</div>
+            <div><strong>An:</strong> verwaltung@postkorb.de</div>
+          </div>
+          <div class="email-body" x-html="reviewDocs[reviewIndex]?.highlightedBody || ''"></div>
+          <div class="email-eval">
+            <p><strong>Korrekte Abteilung:</strong> <span x-text="reviewDocs[reviewIndex]?.correctDept || '–'"></span></p>
+            <p><strong>KI-Vorschlag:</strong> <span x-text="reviewDocs[reviewIndex]?.aiSuggestion || '–'"></span></p>
+            <template x-if="reviewDocs[reviewIndex]?.playerChoice && reviewDocs[reviewIndex].playerChoice !== reviewDocs[reviewIndex].correctDept">
+              <p><strong>Ihre Wahl:</strong> <span x-text="reviewDocs[reviewIndex].playerChoice"></span></p>
+            </template>
+          </div>
+        </div>
       </div>
       <div class="logo">
         <img src="./images/logo_schwarz.png" alt="Logo" class="logo-img" />

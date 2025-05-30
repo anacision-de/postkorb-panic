@@ -19,6 +19,8 @@ function appData() {
     showDataModal: false,
     rawDocs: [],
     docs: [],
+    reviewDocs: [],
+    reviewIndex: 0,
     // Form fields
     playerName: '',
     playerEmail: '',
@@ -137,6 +139,17 @@ function appData() {
       const now = Date.now();
       this.currentDoc.userAnswer = deptName;
       this.currentDoc.timeTaken = (now - this.startTime) / 1000;
+
+      // Add this document to reviewDocs
+      this.reviewDocs.push({
+        text: this.currentDoc.body || '',
+        correctDept: this.currentDoc.correctDept || '',
+        playerChoice: this.currentDoc.userAnswer || '',
+        isCorrect: this.currentDoc.isCorrect,
+        aiSuggestion: this.currentDoc.aiSuggestion || '',
+        highlightedBody: this.currentDoc.highlightedBody || '',
+      });
+
       const buttons = document.querySelectorAll('.dept-btn');
       buttons.forEach(btn => {
         const name = btn.dataset.name?.trim();
@@ -217,6 +230,13 @@ function appData() {
       this.screen = 'result';
     },
 
+    prevDoc() {
+      if (this.reviewIndex > 0) this.reviewIndex--;
+    },
+    nextDoc() {
+      if (this.reviewIndex < this.docs.length - 1) this.reviewIndex++;
+    },
+
     savePlayerData() {
       // Collect game-level data
       const finalScore = this.currentScore;
@@ -273,6 +293,8 @@ function appData() {
       this.playerName = '';
       this.playerEmail = '';
       this.playerConsent = false;
+      this.reviewDocs = [];
+      this.reviewIndex = 0;
     },
 
     backToStart() {

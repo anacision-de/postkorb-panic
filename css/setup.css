@@ -1,0 +1,18 @@
+.email-card-setup {
+    background: #fff;
+    color: #000;
+    width: 70%;
+    max-height: 80vh;
+    overflow-y: auto;
+    margin: 3rem auto;
+    padding: 3em;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    min-height: 20vh;
+}
+
+.email-body {
+    font-size: 2rem;
+    margin: 1em 0;
+    white-space: pre-wrap;
+}

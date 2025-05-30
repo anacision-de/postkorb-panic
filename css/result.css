@@ -7,11 +7,6 @@
   margin: 0;
   color: #fff;
 }
-.idle-note {
-  font-size: 1.5rem;
-  color: #f0f0f0;
-  text-align: center;
-}
 .consent-wrap {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -47,4 +42,42 @@
 }
 .compare-table tr.wrong {
   background: #f9ebea;
+}
+
+.doc-review {
+  margin-top: 30px;
+  background: #fff;
+  color: #000;
+  padding: 1em;
+  border-radius: 8px;
+}
+.doc-nav {
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
+}
+.doc-nav button {
+  font-size: 2rem;
+  padding: 0.5em 1em;
+  cursor: pointer;
+}
+.doc-card {
+  background: #fefefe;
+  border: 1px solid #ccc;
+  padding: 1em;
+  border-radius: 6px;
+}
+.doc-card .email-body {
+  font-size: 2rem;
+  margin: 1em 0;
+  white-space: pre-line;
+}
+.doc-card .email-eval p {
+  margin: 0.3em 0;
+}
+.mark {
+  background: yellow;
+  padding: 0 0.2em;
 }
