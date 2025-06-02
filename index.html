@@ -30,12 +30,17 @@
   <!-- Start Screen -->
   <div x-show="screen === 'start'" x-cloak class="screen start-screen">
     <div class="start-left">
-      <h1>Hand in Hand mit KI! 🤖</h1>
-      <p>Ihre Aufgabe: Postkorb bearbeiten</p>
-      <p>Noch irgendwelche Infos?</p>
+      <h1>Postkorb Panic 🤖</h1>
+      <p>Der Postkorb ist voll, der Druck steigt – und die nächste Mail wartet schon.​
+Gut, dass du nicht allein bist: Eine KI steht bereit, um dir Vorschläge zur Einsortierung zu machen. <strong> Doch aufgepasst: </strong> Sie meint es gut, aber trifft nicht immer ins Schwarze.</p>
+      <p>Du hast die Wahl:​ <br>
+Vertraue der KI – oder entscheide selbst.​
+<strong> Sortiere clever, denke schnell und behalte den Überblick </strong>, wenn die E-Mails im Sekundentakt eintrudeln.​
+
+Am Ende zählt nur eins: <strong> Wird dein Postkorb zur Erfolgsgeschichte – oder zur Panikzone? </strong>​</p>
 
       <div class="result-buttons">
-        <p class="cta">Möchten Sie Ihr Können unter Beweis stellen?</p>
+        <p class="cta"> <strong> Möchten Sie Ihr Können unter Beweis stellen? </strong></p>
         <button class="start-btn" @click="screen = 'setup'">Start</button>
       </div>
     </div>
@@ -91,15 +96,20 @@
   <!-- Erklärung/Setup Screen -->
   <div x-show="screen === 'setup'" x-transition class="screen start-screen">
     <div class="start-left">
-      <h2>Erklärung</h2>
-      <p>Sortieren Sie 10 eingehende E-Mails so schnell wie möglich der richtigen Abteilung zu.</p>
-      <h2>Vor dem Start</h2>
-      <p>Bitte geben Sie einen Spielernamen ein. Dieser wird in der Bestenliste angezeigt:</p>
+      <h1>Bereit für​ Postkorb Panic?</h1>
+      <h2>Bevor es losgeht – wie dürfen wir Sie nennen?​</h2>
       <input type="text" placeholder="Spielername" x-model="playerName" />
 
       <div class="ki-toggle">
-        <p>Wollen KI-Unterstützung erhalten? Sie markiert Schlüsselwörter und macht einen Vorschlag für die korrekte Weiterleitung. 
-        <strong>WICHTIG:</strong> Sie haben das letzte Wort, denn die KI kann sich auch manchmal irren!</p>
+        <p> <strong> Möchten Sie mit KI-Unterstützung spielen?​ </strong><br>
+Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.​ <br> <strong> Sie treffen immer die letzte Entscheidung – aber ein kluger Vorschlag kann helfen! </strong>​</p>
+        <p>
+          ​Wählen Sie Ihren Spielmodus:​ <br>
+          ✅ Mit KI-Hilfe​ <br>
+          Die KI schlägt vor,  Sie sortieren. Ideal zum Üben, Lernen und Schnellsein.​ <br>
+          ❌ Ohne KI​ <br>
+          Alles liegt in Ihrer Hand. Nur Sie, Ihr Verstand – und der Postkorb.
+        </p>
         <label class="slider-label">
           KI-Unterstützung:
           <input type="checkbox" x-model="aiMode" class="slider-checkbox" />
@@ -135,7 +145,7 @@
           <p x-show="aiMode" x-html="docs[0]?.highlightedBody"></p>
         </div>
       </div>
-      <p class="instruction">Tippen Sie auf die richtige Abteilung zur Weiterleitung:</p>
+      <p class="instruction">Treffen Sie die richtige Entscheidung! Wählen Sie die passende Abteilung für diese E-Mail​:</p>
       <div class="department-section">
         <div class="departments">
           <template x-for="dept in departments" :key="dept.name">
@@ -189,7 +199,7 @@
 
     <!-- Abteilungs-Buttons -->
     <div class="footer-controls"></div>
-      <p class="instruction">Tippen Sie auf die richtige Abteilung zur Weiterleitung:</p>
+      <p class="instruction">Treffen Sie die richtige Entscheidung! Wählen Sie die passende Abteilung für diese E-Mail:</p>
       <div class="department-section">
         <div class="departments">
           <template x-for="dept in departments" :key="dept.name">
@@ -220,17 +230,17 @@
         Sie sind mit Ihrem Score besser als <strong x-text="percentile"></strong>% aller bisherigen Teilnehmenden!
       </p>
       <p class="highlight-yellow">
-        Tragen Sie hier Ihren Namen und Ihre E-Mail-Adresse ein. Unter allen Teilnehmenden verlosen wir einen Preis!
-      </p>
+        Wenn Sie möchten, dass auch Ihr Team vom Erlebnis Postkorb Panic profitiert, bieten wir Ihnen mehr als nur ein Spiel:📬 Fordern Sie die Onlineversion für Ihr Team an – ideal für Schulungen, Teamtage oder interne Weiterbildungen.📊 Zusätzlich erhalten Sie eine strukturierte Auswertung aller relevanten Spiel-Kennzahlen – aufbereitet in einem kompakten Whitepaper mit Erkenntnissen zu Entscheidungsverhalten, Reaktionsschnelligkeit und KI-Nutzung.</p>
+
+      <p class="highlight-yellow">
+        Geben Sie einfach Ihre geschäftliche E-Mail-Adresse an, und wir senden Ihnen:​ <br>
+        🔗 Einen Zugang zur Onlineversion von Postkorb Panic​ <br>
+        📄 Ein Whitepaper mit den zentralen Erkenntnissen aus dem Spiel​ <br>
+        📊 Eine Übersicht der relevanten Metriken für Reflexion und Transfer in den Arbeitsalltag​ <br>
+        (Keine Werbemails – nur praxisrelevante Inhalte für Führung & KI-Nutzung.)​</p> 
       <!-- Formular für Name/Email -->
       <div class="form">
         <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" />
-        <div class="consent-wrap">
-          <input type="checkbox" x-model="playerConsent" id="consentCheck" />
-          <label for="consentCheck">
-            Ich bin damit einverstanden, dass mich die anacision GmbH zur Bearbeitung des Gewinnspiels sowie zum Zweck der geschäftlichen Kontaktaufnahme inkl. der Information zu Produkten und Dienstleistungen per E-Mail kontaktiert.
-          </label>
-        </div>
       </div>
       <div class="result-buttons">
         <button class="start-btn" @click="backToStart()">Absenden &amp; zum Start!</button>
