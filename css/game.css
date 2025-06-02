@@ -23,7 +23,7 @@
 .card-stack {
   flex: 1 1 auto;
   overflow-y: auto;
-  padding: 2rem;
+  padding: 0.5rem;
 }
 
 .email-card {
@@ -32,14 +32,12 @@
   width: 70%;
   max-height: 80vh;
   overflow-y: auto;
-  margin: 3rem auto;
+  margin: 1rem auto;
   padding: 3em;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
-.game-screen .email-card {
-  min-height: 70vh;
-}
+
 
 .email-meta {
   font-size: 1.8rem;
@@ -99,7 +97,7 @@
   margin-bottom: 3rem;
 }
 .dept-btn {
-  font-size: 1.3rem;
+  font-size: 2em;
   padding: 15px 30px;
   background: rgb(245, 218, 137);
   border: 2px solid #f1c40f;
@@ -166,14 +164,15 @@
 }
 
 @media (max-width: 1920px) {
-  .email-meta {
-    font-size: 1.2rem; /* Or whatever slightly smaller size you want */
+  .dept-btn {
+    font-size: 1.2rem; 
   }
 }
 
+
 @media (max-width: 1920px) {
   .email-meta {
-    font-size: 1.2rem; /* Or whatever slightly smaller size you want */
+    font-size: 1.2rem; 
   }
 
   .game-screen .dept-btn {

@@ -113,7 +113,7 @@ function appData() {
     // Dummy-Dokumente generieren (Beispieldaten und Spielrunden-Daten)
   generateDemoDoc() {
     const demoDoc = {
-      body: `Sehr geehrte Damen und Herren, \n \n ich wende mich mit einem Anliegen an Sie, das mit meiner beruflichen Weiterentwicklung im Rahmen eines Praktikums bei Ihrer Verwaltung zusammenhängt. Vor kurzem habe ich ein Praktikum in Ihrer Abteilung abgeschlossen, das mir wertvolle Einblicke in die Arbeitsprozesse und Organisationsstrukturen Ihrer Behörde ermöglicht hat. \n\n Im Zuge meiner späteren beruflichen Laufbahn und für die Vervollständigung meiner Unterlagen benötige ich eine offizielle Bestätigung über den Zeitraum und die Art des durchgeführten Praktikums. Diese Bestätigung ist nicht nur ein wichtiger Bestandteil meiner Bewerbungsunterlagen, sondern auch von großem Wert für meine persönliche und professionelle Weiterentwicklung. \n\n Das Praktikum fand vom 1. Mai bis zum 31. Juli 2023 statt und umfasste eine Vielzahl an spannenden Aufgaben und Projekten, die mir ein fundiertes Verständnis des Arbeitsalltags in einer öffentlichen Institution vermittelt haben. Ihre Unterstützung hierbei wäre mir eine große Hilfe. \n\n Ich danke Ihnen im Voraus für Ihre Mühe und hoffe, bald von Ihnen zu hören. Bei Fragen stehe ich selbstverständlich telefonisch oder per E-Mail zur Verfügung. \n \n Mit freundlichen Grüßen, \n \n Sophie Müller`,
+      body: `Sehr geehrte Damen und Herren, \n \n ich wende mich mit einem Anliegen an Sie, das mit meiner beruflichen Weiterentwicklung im Rahmen eines Praktikums bei Ihrer Verwaltung zusammenhängt. Vor kurzem habe ich ein Praktikum in Ihrer Abteilung abgeschlossen, das mir wertvolle Einblicke in die Arbeitsprozesse und Organisationsstrukturen Ihrer Behörde ermöglicht hat. \n\n Im Zuge meiner späteren beruflichen Laufbahn und für die Vervollständigung meiner Unterlagen benötige ich eine offizielle Bestätigung über den Zeitraum und die Art des durchgeführten Praktikums. \n\n Ihre Unterstützung hierbei wäre mir eine große Hilfe. \n\n Ich danke Ihnen im Voraus für Ihre Mühe und hoffe, bald von Ihnen zu hören. Bei Fragen stehe ich selbstverständlich telefonisch oder per E-Mail zur Verfügung. \n \n Mit freundlichen Grüßen, \n \n Sophie Müller`,
       highlights: ["Praktikum", "Verwaltung", "Bestätigung", "Bewerbungsunterlagen"],
       correctDept: "Personalabteilung",
       aiSuggestion: "Personalabteilung"
@@ -305,11 +305,12 @@ function appData() {
 
     // Streudiagramm: Datenpunkte (SVG <circle>) generieren
     generateCircles() {
+      console.log(this.resultsList)
       if (!Array.isArray(this.resultsList)) return '';
       return this.resultsList.map(res => {
         const cx = (res.totalTime / this.maxTime) * this.scatterWidth;
         const cy = this.scatterHeight - (res.correct / this.maxCorrect * this.scatterHeight);
-        const fill = res.ai ? '#f1c40f' : '#333';
+        const fill = res.aiMode ? '#f1c40f' : '#333';
         return `<circle cx="${cx}" cy="${cy}" r="6" fill="${fill}" stroke="#555" opacity="0.9" />`;
       }).join('');
     },

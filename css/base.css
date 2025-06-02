@@ -64,8 +64,8 @@ input[type="email"] {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  width: 20rem;
-  height: 7rem;
+  width: 9em;
+  height: 4em;
   margin: 0.2rem;
 }
 .start-btn:active {
@@ -126,9 +126,8 @@ input[type="email"] {
 
 @media (max-width: 1920px) {
   p, ul, .instruction {
-    font-size: 1.3rem; /* Or whatever slightly smaller size you want */
+    font-size: 1rem;
   }
-
   h1 {
     font-size: clamp(1.7rem, 3vw + 1rem, 3.2rem);
   }
@@ -139,5 +138,5 @@ input[type="email"] {
 
   h3 {
   font-size: clamp(1.1rem, 1.8vw + 0.6rem, 1.8rem);
-}
+  }
 }
