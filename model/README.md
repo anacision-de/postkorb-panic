@@ -1,0 +1,3 @@
+# ModernGBERT für den Anwendungsfall
+
+Hinweis zum Code: Um infer.py laufen zu lassen, muss die `transformers_interpret`-Library gefixt werden. Dazu muss folgende Datei angepasst werden: `.venv/lib/python3.12/site-packages/transformers_interpret/explainers/text/sequence_classification.py`. In Zeile 109 muss die attention mask ebenfalls mit übergeben werden: `preds = self.model(self.input_ids, self.attention_mask)[0]`. Dann sollte es funktionieren.
