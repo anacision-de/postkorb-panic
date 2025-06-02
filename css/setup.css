@@ -14,5 +14,5 @@
 .email-body {
     font-size: 2rem;
     margin: 0.5em 0;
-    white-space: pre-wrap;
+    white-space: pre-line;
 }

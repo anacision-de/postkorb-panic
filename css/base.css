@@ -2,6 +2,8 @@
 html {
   font-size: clamp(14px, 0.8vw, 15px);
   -webkit-text-size-adjust: 100%; /* Prevent iOS text auto-zoom */
+
+  font-family: "Lato", sans-serif;
 }
 body.app {
   margin: 0;
@@ -40,7 +42,7 @@ input[type="email"] {
   width: 70%;
   margin: 0.2em;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  /* border-radius: 6px; */
   box-sizing: border-box;
 }
 
@@ -50,7 +52,7 @@ input[type="email"] {
   margin: 20px 0 10px;
 }
 .highlight-yellow {
-  color: #f1c40f;
+  color: #FDE603;
 }
 .instruction {
   margin-left: 1vw;
@@ -60,9 +62,9 @@ input[type="email"] {
 .start-btn {
   font-size: 2.5rem;
   padding: 15px 30px;
-  background: #f1c40f;
+  background: #FDE603;
   border: none;
-  border-radius: 5px;
+  outline: none;
   cursor: pointer;
   width: 9em;
   height: 4em;
@@ -76,7 +78,7 @@ input[type="email"] {
 .modal {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(54, 60, 72, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;

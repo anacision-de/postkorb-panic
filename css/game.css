@@ -1,6 +1,6 @@
 /* Styles for the Game screen (playing interface) */
 .game-screen {
-  background: #333;
+  background: #363C48;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -11,7 +11,7 @@
 .game-status {
   display: flex;
   justify-content: space-around;
-  background: #222;
+  background: #363C48;
   padding: 10px;
   font-size: 1.8rem;
 }
@@ -42,11 +42,11 @@
 .email-meta {
   font-size: 1.8rem;
   margin-bottom: 10px;
-  color: #555;
+  color: #3d4047;
 }
 
 .email-body mark {
-  background: #ffff00;
+  background: #FDE603;
 }
 
 .mark.white {
@@ -54,7 +54,7 @@
   color: black;
 }
 .mark.yellow {
-  background-color: yellow;
+  background-color: #FDE603;
   color: black;
 }
 
@@ -65,7 +65,7 @@
   text-align: center;
 }
 .progress-bar {
-  background: #ddd;
+  background: #6D6A78;
   height: 12px;
   border-radius: 6px;
   overflow: hidden;
@@ -99,18 +99,17 @@
 .dept-btn {
   font-size: 2em;
   padding: 15px 30px;
-  background: rgb(245, 218, 137);
-  border: 2px solid #f1c40f;
-  border-radius: 8px;
+  background: #FDE603;
   cursor: pointer;
   margin: 10px;
   width: 18%;
   height: 10rem;
   text-align: center;
   position: relative;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25),
-              inset 0 1px 0 rgba(255, 255, 255, 0.6);
   transition: transform 0.1s ease, box-shadow 0.1s ease;
+
+  outline: none;
+  border: none;
 }
 
 .game-screen .dept-btn {
@@ -127,27 +126,27 @@
   margin-bottom: 5px;
 }
 .dept-btn.suggestion {
-  border-color: #f7a307;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+  border-color: #0C2D44;
 }
 .dept-btn .ki-hint {
   position: absolute;
   top: -0.5em;
   right: -0.5em;
-  background: #f1c40f;
+  background: #FDE603;
   color: #000;
-  font-size: 1em;
-  padding: 0.1em 0.1em;
+  font-size: 1rem;
+  padding: 0.2rem 0.4rem;
   border-radius: 3px;
+  box-shadow: 0 0 0.3rem black;
 }
 
 /* Blink animations for correct/wrong selection */
 @keyframes blink-green {
-  0%, 100% { background-color: rgb(245, 218, 137); }
+  0%, 100% { background-color: #FDE603; }
   50% { background-color: #2ecc71; }
 }
 @keyframes blink-red {
-  0%, 100% { background-color: rgb(245, 218, 137); }
+  0%, 100% { background-color: #FDE603; }
   50% { background-color: #e74c3c; }
 }
 .dept-btn.correct-blink {

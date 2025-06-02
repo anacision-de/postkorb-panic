@@ -76,7 +76,7 @@
   transition: 0.3s;
 }
 .slider-checkbox:checked + .slider {
-  background-color: #f1c40f;
+  background-color: #FDE603;
 }
 .slider-checkbox:checked + .slider::before {
   transform: translateX(22px);
@@ -160,7 +160,7 @@
   font-weight: bold;
   cursor: pointer;
   margin-top: 5px;
-  color: #e67e22;
+  color: #FDE603;
 }
 
 @media (max-width: 1920px) {
