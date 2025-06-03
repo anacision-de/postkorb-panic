@@ -30,7 +30,7 @@
   <!-- Start Screen -->
   <div x-show="screen === 'start'" x-cloak class="screen start-screen">
     <div class="start-left">
-      <h1>Postkorb Panic 🤖</h1>
+      <img src="icon.svg" alt="Postkorb Panic">
       <p>Der Postkorb ist voll, der Druck steigt – und die nächste Mail wartet schon.​
 Gut, dass du nicht allein bist: Eine KI steht bereit, um dir Vorschläge zur Einsortierung zu machen. <strong> Doch aufgepasst: </strong> Sie meint es gut, aber trifft nicht immer ins Schwarze.</p>
       <p>Du hast die Wahl:​ <br>
@@ -138,7 +138,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.�
       <div class="email-card-setup">
         <div class="email-meta">
           <div><strong>Von:</strong> <span>user@outlook.de</span></div>
-          <div><strong>An:</strong> <span>verwaltung@postkorb.de"</span></div>
+          <div><strong>An:</strong> <span>verwaltung@postkorb.de</span></div>
         </div>
         <div class="email-body">
           <p x-show="!aiMode" x-text="docs[0]?.body"></p>
@@ -188,7 +188,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.�
       <div class="email-card">
         <div class="email-meta">
           <div><strong>Von:</strong> <span>user@outlook.de</span></div>
-          <div><strong>An:</strong> <span>verwaltung@postkorb.de"</span></div>
+          <div><strong>An:</strong> <span>verwaltung@postkorb.de</span></div>
         </div>
         <div class="email-body">
           <p x-show="!aiMode" x-text="currentDoc.body"></p>

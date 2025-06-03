@@ -164,7 +164,7 @@
 }
 
 @media (max-width: 1920px) {
-.leaderboard th, .leaderboard td {
-  font-size: 1.2rem;
-}
+  .leaderboard th, .leaderboard td {
+    font-size: 1.2rem;
+  }
 }
