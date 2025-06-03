@@ -253,6 +253,7 @@ function appData() {
         text: doc.body || '',
         correctDept: doc.correctDept || '',
         playerChoice: doc.userAnswer || '',
+        aiSuggestion: doc.aiSuggestion || '',
         isCorrect: doc.userAnswer === doc.correctDept,
         responseTime: doc.timeTaken || 0
       }));
@@ -379,34 +380,19 @@ function appData() {
       this.leaderboard = sorted.slice(0, 5);
     },
 
-    // Ergebnisse als CSV herunterladen
-    downloadCSV() {
+    // Ergebnisse als JSON herunterladen
+    downloadJSON() {
       if (!this.resultsList || this.resultsList.length === 0) return;
 
-      // Get all top-level keys from the first result
-      const headers = Object.keys(this.resultsList[0]);
+      // Konvertiere resultsList zu JSON string
+      const jsonContent = JSON.stringify(this.resultsList, null, 2); 
 
-      // Create CSV rows
-      const rows = this.resultsList.map(entry =>
-        headers.map(key => {
-          const value = entry[key];
-          // Convert arrays/objects to JSON strings to store in CSV safely
-          if (typeof value === 'object') {
-            return JSON.stringify(value);
-          }
-          return value ?? ''; // default to empty string if null/undefined
-        })
-      );
-
-      // Join into CSV string
-      const csvContent = [headers, ...rows].map(row => row.join(',')).join('\n');
-
-      // Trigger download
-      const blob = new Blob([csvContent], { type: 'text/csv' });
+      // Erzeuge einen Blob aund starte den Download
+      const blob = new Blob([jsonContent], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'Postkorb-Panic_Ergebnisse.csv';
+      a.download = 'Postkorb-Panic_Ergebnisse.json';
       a.click();
       URL.revokeObjectURL(url);
     },

@@ -74,6 +74,10 @@ input[type="email"] {
   transform: scale(0.98);
 }
 
+.start-btn.cancel {
+  margin-left: 0.2rem;
+}
+
 /* Modal (Admin Data Overlay) */
 .modal {
   position: fixed;

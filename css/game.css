@@ -140,6 +140,18 @@
   box-shadow: 0 0 0.3rem black;
 }
 
+.abort-section {
+  text-align: right;
+  margin: 0.5rem 1rem;
+}
+.abort-btn {
+  background: none;
+  border: none;
+  font-size: 3rem;
+  cursor: pointer;
+}
+
+
 /* Blink animations for correct/wrong selection */
 @keyframes blink-green {
   0%, 100% { background-color: #FDE603; }

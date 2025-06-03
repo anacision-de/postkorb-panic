@@ -121,6 +121,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.�
       </p>
       <div class="result-buttons">
         <button class="start-btn" @click="startGame()">Los!</button>
+        <button class="start-btn cancel" @click="resetGame(); screen = 'start'">Zurück</button>
       </div>
     </div>
 
@@ -182,6 +183,12 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.�
       </div>
       <span class="progress-text" x-text="`Dokument ${currentIndex + 1} von ${docs.length}`"></span>
     </div>
+
+    <!-- Abbruch-Button -->
+    <div class="abort-section">
+      <button class="abort-btn" @click="if (confirm('Möchten Sie das Spiel wirklich abbrechen?')) { resetGame(); screen = 'start'; }">❌</button>
+    </div>
+
 
     <!-- E-Mail Karte -->
     <div class="card-stack">
@@ -333,7 +340,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.�
       <h3>Gespeicherte Daten <button @click="showDataModal=false" class="close-btn">×</button></h3>
       <p><em>Zum Herunterladen der Email-Adressen klicken</em></p>
       <div class="result-buttons">
-        <button class=start-btn @click="downloadCSV()">CSV herunterladen</button>
+        <button class=start-btn @click="downloadJSON()">JSON herunterladen</button>
       </div>
     </div>
   </div>
