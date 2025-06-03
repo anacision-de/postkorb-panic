@@ -28,7 +28,7 @@ function appData() {
     // Flag für Antworten-Vergleich (Ergebnisansicht)
     showAnswers: false,
     // Konstanten
-    maxTime: 300,       // maximale Zeit (Sekunden) für Diagramm X-Achse
+    maxTime: 180,       // maximale Zeit (Sekunden) für Diagramm X-Achse
     maxCorrect: 10,     // maximale korrekte Antworten (Y-Achse)
     scatterWidth: 600,
     scatterHeight: 300,
