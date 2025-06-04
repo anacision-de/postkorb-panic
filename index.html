@@ -31,15 +31,15 @@
   <div x-show="screen === 'start'" x-cloak class="screen start-screen">
     <div class="start-left">
       <img src="icon.svg" alt="Postkorb Panic">
-      <p>Der Postkorb ist voll, der Druck steigt – und die nächste Mail wartet schon.​
+      <p>Der Postkorb ist voll, der Druck steigt – und die nächste Mail wartet schon.
 Gut, dass du nicht allein bist: Eine KI steht bereit, um dir Vorschläge zur Einsortierung zu machen. <strong> Doch aufgepasst: </strong> Sie meint es gut, aber trifft nicht immer ins Schwarze.</p>
       <p>Du hast die Wahl:​ <br>
-Vertraue der KI – oder entscheide selbst.​
-<strong> Sortiere clever, denke schnell und behalte den Überblick </strong>, wenn die E-Mails im Sekundentakt eintrudeln.​
+Vertraue der KI – oder entscheide selbst.
+<strong> Sortiere clever, denke schnell und behalte den Überblick </strong>, wenn die E-Mails im Sekundentakt eintrudeln.
 
-Am Ende zählt nur eins: <strong> Wird dein Postkorb zur Erfolgsgeschichte – oder zur Panikzone? </strong>​</p>
+Am Ende zählt nur eins: <strong> Wird dein Postkorb zur Erfolgsgeschichte – oder zur Panikzone? </strong></p>
 
-      <div class="result-buttons">
+      <div class="nav-buttons two">
         <p class="cta"> <strong> Möchten Sie Ihr Können unter Beweis stellen? </strong></p>
         <button class="start-btn" @click="screen = 'setup'">Start</button>
       </div>
@@ -105,7 +105,7 @@ Am Ende zählt nur eins: <strong> Wird dein Postkorb zur Erfolgsgeschichte – o
         <p> <strong> Möchten Sie mit KI-Unterstützung spielen?</strong><br>
 Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<br> <strong> Sie treffen immer die letzte Entscheidung – aber ein kluger Vorschlag kann helfen! </strong>​</p>
         <p>
-          ​Wählen Sie Ihren Spielmodus:<br>
+          Wählen Sie Ihren Spielmodus:<br>
           ✅ Mit KI-Hilfe<br>
           Die KI schlägt vor, Sie sortieren. Ideal zum Üben, Lernen und Schnellsein.<br>
           ❌ Ohne KI<br>
@@ -120,7 +120,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       <p x-show="aiMode" class="highlight-yellow">
         Mit aktiviertem KI-Modus sehen Sie unten eine Vorschau, wie Begriffe markiert und Vorschläge gemacht werden.
       </p>
-      <div class="result-buttons">
+      <div class="nav-buttons">
         <button class="start-btn" @click="startGame()">Los!</button>
         <button class="start-btn cancel" @click="resetGame(); screen = 'start'">Zurück</button>
       </div>
@@ -238,16 +238,16 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
         Wenn Sie möchten, dass auch Ihr Team vom Erlebnis Postkorb Panic profitiert, bieten wir Ihnen mehr als nur ein Spiel:📬 Fordern Sie die Onlineversion für Ihr Team an – ideal für Schulungen, Teamtage oder interne Weiterbildungen.📊 Zusätzlich erhalten Sie eine strukturierte Auswertung aller relevanten Spiel-Kennzahlen – aufbereitet in einem kompakten Whitepaper mit Erkenntnissen zu Entscheidungsverhalten, Reaktionsschnelligkeit und KI-Nutzung.</p>
 
       <p class="highlight-yellow">
-        Geben Sie einfach Ihre geschäftliche E-Mail-Adresse an, und wir senden Ihnen:​ <br>
-        🔗 Einen Zugang zur Onlineversion von Postkorb Panic​ <br>
-        📄 Ein Whitepaper mit den zentralen Erkenntnissen aus dem Spiel​ <br>
-        📊 Eine Übersicht der relevanten Metriken für Reflexion und Transfer in den Arbeitsalltag​ <br>
-        (Keine Werbemails – nur praxisrelevante Inhalte für Führung & KI-Nutzung.)​</p> 
+        Geben Sie einfach Ihre geschäftliche E-Mail-Adresse an, und wir senden Ihnen: <br>
+        🔗 Einen Zugang zur Onlineversion von Postkorb Panic <br>
+        📄 Ein Whitepaper mit den zentralen Erkenntnissen aus dem Spiel <br>
+        📊 Eine Übersicht der relevanten Metriken für Reflexion und Transfer in den Arbeitsalltag <br>
+        (Keine Werbemails – nur praxisrelevante Inhalte für Führung & KI-Nutzung.)</p> 
       <!-- Formular für Name/Email -->
       <div class="form">
         <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" />
       </div>
-      <div class="result-buttons">
+      <div class="nav-buttons two">
         <button class="start-btn" @click="backToStart()">Absenden &amp; zum Start!</button>
       </div>
     </div>
@@ -337,7 +337,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
     <div class="modal-content">
       <h3>Gespeicherte Daten <button @click="showDataModal=false" class="close-btn">×</button></h3>
       <p><em>Zum Herunterladen der Email-Adressen klicken</em></p>
-      <div class="result-buttons">
+      <div class="nav-buttons two">
         <button class=start-btn @click="downloadJSON()">JSON herunterladen</button>
       </div>
     </div>
