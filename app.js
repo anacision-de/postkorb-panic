@@ -24,7 +24,6 @@ function appData() {
     // Form fields
     playerName: '',
     playerEmail: '',
-    playerConsent: false,
     // Flag für Antworten-Vergleich (Ergebnisansicht)
     showAnswers: false,
     // Konstanten
@@ -202,9 +201,8 @@ function appData() {
       this.currentScore = finalScore;
       // Ergebnisobjekt erstellen
     this.currentResult = {
-      email: this.playerConsent ? this.playerEmail : '',
+      email: this.playerEmail,
       name: this.playerName,
-      consent: this.playerConsent,
       score: finalScore,
       totalTime: this.timeElapsed,
       date: new Date().toISOString(),
@@ -242,10 +240,9 @@ function appData() {
       const finalScore = this.currentScore;
       const totalTime = this.timeElapsed;
       const name = this.playerName;
-      const email = (this.playerConsent && this.playerEmail && this.playerEmail.length > 3)
+      const email = (this.playerEmail && this.playerEmail.length > 3)
         ? this.playerEmail
         : '';
-      const consent = this.playerConsent;
       const aiMode = this.aiMode;
 
       // Collect per-document answers
@@ -262,7 +259,6 @@ function appData() {
       const entry = {
         name,
         email,
-        consent,
         score: finalScore,
         totalTime: totalTime,
         aiMode: aiMode,
@@ -293,7 +289,6 @@ function appData() {
       this.currentDoc = this.docs[0];
       this.playerName = '';
       this.playerEmail = '';
-      this.playerConsent = false;
       this.reviewDocs = [];
       this.reviewIndex = 0;
     },

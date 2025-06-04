@@ -7,15 +7,6 @@
   margin: 0;
   color: #fff;
 }
-.consent-wrap {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 10px;
-  color: #eee;
-  font-size: 1.7rem;
-  line-height: 1.4;
-  margin-top: 10px;
-}
 /* Answers comparison table */
 .answers-compare {
   margin-top: 20px;
