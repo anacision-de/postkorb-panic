@@ -69,10 +69,10 @@ function appData() {
 
       const sampleSize = 10; // or however many per round
       this.docs = this.shuffleArray(this.rawDocs).slice(0, sampleSize).map(d => ({
-        body: d.text,
-        highlightedBody: d.highlights,
-        correctDept: d.label,
-        aiSuggestion: d.prediction
+        body: d.text.trim(),
+        highlightedBody: d.highlights.trim(),
+        correctDept: d.label.trim(),
+        aiSuggestion: d.prediction.trim()
       }));
       // Status zurücksetzen
       this.currentIndex = 0;

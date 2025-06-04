@@ -16,10 +16,6 @@
   line-height: 1.4;
   margin-top: 10px;
 }
-.consent-wrap input[type="checkbox"] {
-  transform: scale(1.2);
-  align-self: start;
-}
 /* Answers comparison table */
 .answers-compare {
   margin-top: 20px;
@@ -27,11 +23,10 @@
 .compare-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 2rem;
 }
 .compare-table th, .compare-table td {
-  border: 1px solid #aaa;
-  padding: 4px 6px;
+  border: 0.1rem solid #aaa;
+  padding: 0.2rem 0.4rem;
   text-align: center;
 }
 .compare-table th {
@@ -68,11 +63,6 @@
   border: 1px solid #ccc;
   padding: 1em;
   border-radius: 6px;
-}
-.doc-card .email-body {
-  font-size: 2rem;
-  margin: 1em 0;
-  white-space: pre-line;
 }
 .doc-card .email-eval p {
   margin: 0.3em 0;

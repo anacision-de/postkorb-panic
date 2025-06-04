@@ -97,8 +97,8 @@ Am Ende zählt nur eins: <strong> Wird dein Postkorb zur Erfolgsgeschichte – o
   <div x-show="screen === 'setup'" x-transition class="screen start-screen">
     <div class="start-left">
       <img src="icon.svg" alt="Postkorb Panic">
-      <h1>Bereit für Postkorb Panic?</h1>
-      <h2>Bevor es losgeht — wie dürfen wir Sie nennen?</h2>
+      <h2>Bereit für Postkorb Panic?</h2>
+      <p>Bevor es losgeht — wie dürfen wir Sie nennen?</p>
       <input type="text" placeholder="Spielername" x-model="playerName" />
 
       <div class="ki-toggle">
@@ -117,9 +117,6 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
           <span class="slider"></span>
         </label>
       </div>
-      <p x-show="aiMode" class="highlight-yellow">
-        Mit aktiviertem KI-Modus sehen Sie unten eine Vorschau, wie Begriffe markiert und Vorschläge gemacht werden.
-      </p>
       <div class="result-buttons">
         <button class="start-btn" @click="startGame()">Los!</button>
         <button class="start-btn cancel" @click="resetGame(); screen = 'start'">Zurück</button>
@@ -127,23 +124,20 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
     </div>
 
     <div class="start-right">
-      <h3>So funktioniert das Spiel</h3>
-      <p>Sie sehen eine eingehende E-Mail und entscheiden, an welche Abteilung sie weitergeleitet werden soll.</p>
+      <h2>So funktioniert das Spiel</h2>
+      <p>Sie sehen eine eingehende E-Mail und entscheiden, an welche Abteilung sie weitergeleitet werden soll. Wählen Sie dazu die korrekte Abteilung unterhalb der E-Mail aus, an die die E-Mail weitergeleitet werden soll.</p>
       
-      <h3>Beispiel E-Mail</h3>
+      <h3>Beispiel</h3>
       <div class="email-card-setup">
         <div class="email-meta">
           <div><strong>Von:</strong> <span>user@outlook.de</span></div>
           <div><strong>An:</strong> <span>verwaltung@postkorb.de</span></div>
         </div>
-        <div class="email-body">
-          <p x-show="!aiMode" x-text="docs[0]?.body"></p>
-          <p x-show="aiMode" x-html="docs[0]?.highlightedBody"></p>
-        </div>
+        <p class="email-body" x-show="!aiMode" x-text="docs[0]?.body"></p>
+        <p class="email-body" x-show="aiMode" x-html="docs[0]?.highlightedBody"></p>
       </div>
-      <p class="instruction">Treffen Sie die richtige Entscheidung! Wählen Sie die passende Abteilung für diese E-Mail​:</p>
       <div class="department-section">
-        <div class="departments">
+        <div class="departments wrap">
           <template x-for="dept in departments" :key="dept.name">
             <button class="dept-btn" 
                     :class="{'suggestion': aiMode && dept.name === docs[0]?.aiSuggestion}"
@@ -170,6 +164,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       <span>Zeit: <strong x-text="formatTime(timeElapsed)"></strong></span>
       <span>Score: <strong x-text="currentScore"></strong></span>
       <span>KI-Modus: <strong x-text="aiMode ? 'an' : 'aus'"></strong></span>
+      <button class="abort-btn" @click="if (confirm('Möchten Sie das Spiel wirklich abbrechen?')) { resetGame(); screen = 'start'; }">Spiel abbrechen</button>
     </div>
 
     <!-- Fortschrittsbalken -->
@@ -179,12 +174,6 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       </div>
       <span class="progress-text" x-text="`Dokument ${currentIndex + 1} von ${docs.length}`"></span>
     </div>
-
-    <!-- Abbruch-Button -->
-    <div class="abort-section">
-      <button class="abort-btn" @click="if (confirm('Möchten Sie das Spiel wirklich abbrechen?')) { resetGame(); screen = 'start'; }">❌</button>
-    </div>
-
 
     <!-- E-Mail Karte -->
     <div class="card-stack">
@@ -201,8 +190,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
     </div>
 
     <!-- Abteilungs-Buttons -->
-    <div class="footer-controls"></div>
-      <p class="instruction">Treffen Sie die richtige Entscheidung! Wählen Sie die passende Abteilung für diese E-Mail:</p>
+    <div class="footer-controls">
       <div class="department-section">
         <div class="departments">
           <template x-for="dept in departments" :key="dept.name">
@@ -234,10 +222,9 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       <p x-show="percentile !== null">
         Sie sind mit Ihrem Score besser als <strong x-text="percentile"></strong>% aller bisherigen Teilnehmenden!
       </p>
-      <p class="highlight-yellow">
+      <p>
         Wenn Sie möchten, dass auch Ihr Team vom Erlebnis Postkorb Panic profitiert, bieten wir Ihnen mehr als nur ein Spiel:📬 Fordern Sie die Onlineversion für Ihr Team an – ideal für Schulungen, Teamtage oder interne Weiterbildungen.📊 Zusätzlich erhalten Sie eine strukturierte Auswertung aller relevanten Spiel-Kennzahlen – aufbereitet in einem kompakten Whitepaper mit Erkenntnissen zu Entscheidungsverhalten, Reaktionsschnelligkeit und KI-Nutzung.</p>
-
-      <p class="highlight-yellow">
+      <p>
         Geben Sie einfach Ihre geschäftliche E-Mail-Adresse an, und wir senden Ihnen:​ <br>
         🔗 Einen Zugang zur Onlineversion von Postkorb Panic​ <br>
         📄 Ein Whitepaper mit den zentralen Erkenntnissen aus dem Spiel​ <br>
@@ -290,7 +277,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
         <h3>Antworten vergleichen</h3>
         <table class="compare-table">
           <thead>
-            <tr><th>#</th><th>Abteilung (richtig)</th><th>Ihre Antwort</th><th>KI-Vorschlag</th></tr>
+            <tr><th>#</th><th>Korrekte Abteilung</th><th>Ihre Antwort</th><th>KI-Vorschlag</th></tr>
           </thead>
           <tbody>
             <template x-for="(doc, i) in docs" :key="i">

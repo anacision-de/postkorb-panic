@@ -30,7 +30,6 @@
   background: #fff;
   color: #000;
   width: 70%;
-  max-height: 80vh;
   overflow-y: auto;
   margin: 1rem auto;
   padding: 3em;
@@ -40,8 +39,8 @@
 
 
 .email-meta {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+  font-size: 0.8rem;
+  margin-bottom: 0.7rem;
   color: #3d4047;
 }
 
@@ -84,22 +83,22 @@
 /* Department selection buttons */
 .footer-controls {
   flex-shrink: 0;
-  padding: 1rem 2rem;
-  margin-bottom: 3rem;
   background: #333;
 }
 
 .departments {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 20px;
-  margin-bottom: 3rem;
-  gap: 20px;
+  /* flex-wrap: wrap; */
+  /* justify-content: center; */
+  padding: 1rem;
+  gap: 1rem;
 }
 .dept-btn {
-  font-size: 2em;
-  padding: 1.5rem 2rem;
+  flex-grow: 1;
+  flex-basis: 0;
+
+  font-size: 1.5rem;
+  padding: 0.7rem 1.5rem;
   background: #FDE603;
   cursor: pointer;
   text-align: center;
@@ -108,11 +107,6 @@
 
   outline: none;
   border: none;
-}
-
-.game-screen .dept-btn {
-  height: 15rem;
-  font-size: 2.3rem;
 }
 
 .dept-btn:active {
@@ -149,15 +143,11 @@
   padding-top: 0.2rem;
 }
 
-.abort-section {
-  text-align: right;
-  margin: 0.5rem 1rem;
-}
 .abort-btn {
   background: none;
   border: none;
-  font-size: 3rem;
   cursor: pointer;
+  color: #ccc;
 }
 
 
@@ -181,25 +171,4 @@
 .dept-btn.disabled {
   pointer-events: none;
   opacity: 0.5;
-}
-
-@media (max-width: 1920px) {
-  .dept-btn {
-    font-size: 1.2rem; 
-  }
-}
-
-
-@media (max-width: 1920px) {
-  .email-meta {
-    font-size: 1.2rem; 
-  }
-
-  .game-screen .dept-btn {
-    height: 10rem;
-  }
-
-  .game-screen .email-card {
-    min-height: auto;
-  }
 }
