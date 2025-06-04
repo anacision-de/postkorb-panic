@@ -81,12 +81,17 @@
 }
 
 /* Shared buttons container (CTA text + button) */
-.result-buttons {
+.nav-buttons {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  gap: 1em;
   justify-content: center;
   text-align: center;
+}
+
+.nav-buttons.two {
+  flex-direction: column;
 }
 
 /* Leaderboard table (Top 5 scores) */
