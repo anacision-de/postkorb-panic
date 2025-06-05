@@ -25,7 +25,7 @@ function appData() {
     playerName: '',
     playerEmail: '',
     // Konstanten
-    maxTime: 180,       // maximale Zeit (Sekunden) für Diagramm X-Achse
+    minMaxTime: 180,       // minimale maximale Zeit (Sekunden) für Diagramm X-Achse
     maxCorrect: 10,     // maximale korrekte Antworten (Y-Achse)
     scatterWidth: 600,
     scatterHeight: 300,
@@ -55,6 +55,7 @@ function appData() {
       // Beispiel-Dokument für Vorschau im Setup-Screen generieren
       this.docs = this.generateDemoDoc();
       this.currentDoc = this.docs[0];
+      this.generateScatterPlot(); 
     },
 
     // Spiel starten (neue Runde)
@@ -295,18 +296,49 @@ function appData() {
     backToStart() {
       this.savePlayerData();
       this.resetGame();
+      this.generateScatterPlot();
       this.screen = "start";
+    },
+
+    calculateQuantile(arr, q) {
+      if (!arr.length) return this.minMaxTime;
+      const sorted = arr.slice().sort((a, b) => a - b);
+      const pos = (sorted.length - 1) * q;
+      const base = Math.floor(pos);
+      const rest = pos - base;
+      if (sorted[base + 1] !== undefined) {
+        return sorted[base] + rest * (sorted[base + 1] - sorted[base]);
+      } else {
+        return sorted[base];
+      }
+    },
+
+    generateScatterPlot() {
+      if (this.resultsList.length >= 1) {
+        const times = this.resultsList.map(r => r.totalTime || 0);
+        const quantile = this.calculateQuantile(times, 0.9);
+        this.maxTime = Math.max(this.minMaxTime, quantile);
+      } else {
+        this.maxTime = this.minMaxTime;
+      }
+      // These update the SVG bindings via Alpine.js
+      this.generateCircles();
+      this.generateTicks();
+      this.generateGrid();
     },
 
     // Streudiagramm: Datenpunkte (SVG <circle>) generieren
     generateCircles() {
       if (!Array.isArray(this.resultsList)) return '';
-      return this.resultsList.map(res => {
-        const cx = (res.totalTime / this.maxTime) * this.scatterWidth;
-        const cy = this.scatterHeight - (res.correct / this.maxCorrect * this.scatterHeight);
-        const fill = res.aiMode ? '#f1c40f' : '#333';
-        return `<circle cx="${cx}" cy="${cy}" r="6" fill="${fill}" stroke="#555" opacity="0.9" />`;
-      }).join('');
+      return this.resultsList
+        .filter(res => res.totalTime <= this.maxTime)  // Only include entries within maxTime
+        .map(res => {
+          const cx = (res.totalTime / this.maxTime) * this.scatterWidth;
+          const cy = this.scatterHeight - (res.correct / this.maxCorrect * this.scatterHeight);
+          const fill = res.aiMode ? '#f1c40f' : '#333';
+          return `<circle cx="${cx}" cy="${cy}" r="6" fill="${fill}" stroke="#555" opacity="0.9" />`;
+        })
+        .join('');
     },
     // Streudiagramm: Achsen-Ticks (SVG) generieren
     generateTicks() {

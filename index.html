@@ -253,7 +253,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
             <tr :class="{highlight: currentResult && entry === currentResult}">
               <td x-text="idx+1"></td>
               <td x-text="entry.name"></td>
-              <td x-text="formatTime(timeElapsed)"></td>
+              <td x-text="formatTime(entry.totalTime)"></td>
               <td x-text="entry.correct"></td>
               <td x-text="entry.score.toFixed(1)"></td>
               <td x-text="entry.aiMode ? 'an' : 'aus'"></td>
