@@ -4,12 +4,12 @@ function appData() {
     screen: 'start',
     aiMode: false,
     disableButtons: false,
-    docs: [],           // 10 Dokumente pro Spielrunde
     currentIndex: 0,
     currentDoc: null,
     timeElapsed: 0,
     timerInterval: null,
-    currentScore: 0,
+    currentScore: 0, // Score für aktuelle Auswahl
+    totalScore: 0,
     correctCount: 0,
     resultsList: [],    // alle gespeicherten Ergebnisse
     leaderboard: [],    // Top-5 Einträge aus resultsList
@@ -24,8 +24,6 @@ function appData() {
     // Form fields
     playerName: '',
     playerEmail: '',
-    // Flag für Antworten-Vergleich (Ergebnisansicht)
-    showAnswers: false,
     // Konstanten
     maxTime: 180,       // maximale Zeit (Sekunden) für Diagramm X-Achse
     maxCorrect: 10,     // maximale korrekte Antworten (Y-Achse)
@@ -78,21 +76,21 @@ function appData() {
       this.correctCount = 0;
       this.currentDoc = this.docs[0];
       this.currentDoc.userAnswer = null;
+      this.currentDoc.score = 0;
       this.startTime = Date.now();
+
       this.timeElapsed = 0;
       this.currentScore = 0;
+      this.totalScore = 0;
       this.currentResult = null;
       this.rank = null;
       this.percentile = null;
-      this.showAnswers = false;
       // Wechsel zum Spiel-Screen
       this.screen = 'game';
       // Timer starten (Sekundenzähler)
       if (this.timerInterval) clearInterval(this.timerInterval);
       this.timerInterval = setInterval(() => {
         this.timeElapsed++;
-        // Score laufend aktualisieren (basiert auf correctCount und timeElapsed)
-        this.currentScore = this.calculateScore(this.correctCount, this.timeElapsed);
       }, 1000);
     },
 
@@ -155,7 +153,6 @@ function appData() {
           this.currentIndex++;
           this.currentDoc = this.docs[this.currentIndex];
           this.startTime = Date.now();
-          this.currentScore = this.calculateScore(this.correctCount, this.timeElapsed);
         } else {
           this.endGame();
         }
@@ -172,6 +169,11 @@ function appData() {
         const now = Date.now();
         this.currentDoc.userAnswer = deptName;
         this.currentDoc.timeTaken = (now - this.startTime) / 1000;
+  
+        this.currentScore = this.calculateScorePerQuestion(correct, this.currentDoc.timeTaken, this.currentDoc.aiSuggestion === deptName);
+        this.currentScore = Math.round(this.currentScore * 10) / 10; // auf 1 Dezimalstelle runden
+        this.totalScore += this.currentScore;
+        this.currentDoc.currentScore = this.currentScore;
 
         // Add this document to reviewDocs
         this.reviewDocs.push({
@@ -181,6 +183,7 @@ function appData() {
           isCorrect: this.currentDoc.isCorrect,
           aiSuggestion: this.currentDoc.aiSuggestion || '',
           highlightedBody: this.currentDoc.highlightedBody || '',
+          score: this.currentDoc.currentScore || 0,
         });
 
       this.blinkDept(deptName, correct, true);
@@ -192,8 +195,8 @@ function appData() {
       clearInterval(this.timerInterval);
       this.timerInterval = null;
       // Finalen Score berechnen
-      const finalScore = this.calculateScore(this.correctCount, this.timeElapsed);
-      this.currentScore = finalScore;
+      const finalScore = this.totalScore;
+      this.totalScore = finalScore;
       // Ergebnisobjekt erstellen
     this.currentResult = {
       email: this.playerEmail,
@@ -232,7 +235,8 @@ function appData() {
 
     savePlayerData() {
       // Collect game-level data
-      const finalScore = this.currentScore;
+      const finalScore = this.totalScore
+      ;
       const totalTime = this.timeElapsed;
       const name = this.playerName;
       const email = (this.playerEmail && this.playerEmail.length > 3)
@@ -247,7 +251,8 @@ function appData() {
         playerChoice: doc.userAnswer || '',
         aiSuggestion: doc.aiSuggestion || '',
         isCorrect: doc.userAnswer === doc.correctDept,
-        responseTime: doc.timeTaken || 0
+        responseTime: doc.timeTaken || 0,
+        score: doc.score || 0,
       }));
 
       // Build result entry
@@ -275,7 +280,7 @@ function appData() {
     resetGame() {
       this.docs = [];
       this.answers = [];
-      this.currentScore = 0;
+      this.totalScore = 0;
       this.timeElapsed = 0;
       this.aiMode = false;
       this.currentDocIndex = 0;
@@ -296,7 +301,6 @@ function appData() {
 
     // Streudiagramm: Datenpunkte (SVG <circle>) generieren
     generateCircles() {
-      console.log(this.resultsList)
       if (!Array.isArray(this.resultsList)) return '';
       return this.resultsList.map(res => {
         const cx = (res.totalTime / this.maxTime) * this.scatterWidth;
@@ -346,14 +350,29 @@ function appData() {
       return lines.join('');
     },
 
-    // Score berechnen aus Korrektheit und Zeit
-    calculateScore(correctCount, timeSec) {
-      const correctScore = (correctCount / 10) * 70;
-      const timeScore = (timeSec <= this.maxTime)
-        ? ((this.maxTime - timeSec) / this.maxTime) * 30
-        : 0;
-      return Math.round(correctScore + timeScore);
+    auxNonlinScore(timeTaken, scale, curve1, curve2) {
+        if (timeTaken > 0) {
+            return Math.pow(1 + Math.pow(timeTaken / scale, curve1), -curve2);
+        } else {
+            return 1;
+        }
     },
+
+    calculateScorePerQuestion(correct, time, aiSuggestionPicked, scale = 5.0, curve1 = 5.0, curve2 = 1.0, maxNegProp = 1.0) {
+      const maxPointsPerQuestion = 10.0;
+      
+      const auxScoreVal = this.auxNonlinScore(time, scale, curve1, curve2);
+      const posPoints = correct * maxPointsPerQuestion * auxScoreVal;
+      let negPoints = 0;
+
+      if (this.aiMode) {
+          negPoints = aiSuggestionPicked * (1 - correct) * maxPointsPerQuestion * maxNegProp * auxScoreVal;
+      }
+
+      const points = posPoints - negPoints;
+      return Math.max(points, 0);
+    },
+
 
     // Bestenliste (Top 5) aus resultsList aktualisieren
     updateLeaderboard() {
