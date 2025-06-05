@@ -166,9 +166,8 @@ function appData() {
       if (!this.currentDoc || this.disableButtons) return;
         this.disableButtons = true;
         const correct = (deptName === this.currentDoc.correctDept);
-        const now = Date.now();
         this.currentDoc.userAnswer = deptName;
-        this.currentDoc.timeTaken = (now - this.startTime) / 1000;
+        this.currentDoc.timeTaken = (Date.now() - this.startTime) / 1000;
   
         this.currentScore = this.calculateScorePerQuestion(correct, this.currentDoc.timeTaken, this.currentDoc.aiSuggestion === deptName);
         this.currentScore = Math.round(this.currentScore * 10) / 10; // auf 1 Dezimalstelle runden
@@ -252,7 +251,7 @@ function appData() {
         aiSuggestion: doc.aiSuggestion || '',
         isCorrect: doc.userAnswer === doc.correctDept,
         responseTime: doc.timeTaken || 0,
-        score: doc.score || 0,
+        score: doc.currentScore || 0,
       }));
 
       // Build result entry
