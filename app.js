@@ -130,65 +130,60 @@ function appData() {
     return [demoDoc];
   },
 
-    // Auswahl einer Abteilung verarbeiten (gemeinsame Logik für Demo und Spiel)
-    processSelection(deptName, advance = true) {
-      if (!this.currentDoc || this.disableButtons) return;
-      this.disableButtons = true;
-      const correct = (deptName === this.currentDoc.correctDept);
-      const now = Date.now();
-      this.currentDoc.userAnswer = deptName;
-      this.currentDoc.timeTaken = (now - this.startTime) / 1000;
-
-      // Add this document to reviewDocs
-      this.reviewDocs.push({
-        text: this.currentDoc.body || '',
-        correctDept: this.currentDoc.correctDept || '',
-        playerChoice: this.currentDoc.userAnswer || '',
-        isCorrect: this.currentDoc.isCorrect,
-        aiSuggestion: this.currentDoc.aiSuggestion || '',
-        highlightedBody: this.currentDoc.highlightedBody || '',
-      });
-
-      const buttons = document.querySelectorAll('.dept-btn');
+  // Demo: Auswahl einer Abteilung (nur visuelles Blinksignal, kein Fortschritt)
+  blinkDept(deptName, correct, advance = false) {
+    const buttons = document.querySelectorAll('.dept-btn');
+    buttons.forEach(btn => {
+      const name = btn.dataset.name?.trim();
+      btn.classList.add('disabled');
+      if (name === deptName) {
+        btn.classList.add(correct ? 'correct-blink' : 'wrong-blink');
+      }
+      if (!correct && name === this.currentDoc.correctDept) {
+        btn.classList.add('correct-blink');
+      }
+    });
+    setTimeout(() => {
       buttons.forEach(btn => {
-        const name = btn.dataset.name?.trim();
-        btn.classList.add('disabled');
-        if (name === deptName) {
-          btn.classList.add(correct ? 'correct-blink' : 'wrong-blink');
-        }
-        if (!correct && name === this.currentDoc.correctDept) {
-          btn.classList.add('correct-blink');
-        }
+        btn.classList.remove('correct-blink', 'wrong-blink', 'disabled');
       });
-      setTimeout(() => {
-        buttons.forEach(btn => {
-          btn.classList.remove('correct-blink', 'wrong-blink', 'disabled');
-        });
-        if (advance) {
-          // Im Spiel: bei korrekter Auswahl Zähler erhöhen
-          if (correct) this.correctCount++;
-          // Nächstes Dokument oder Spiel beenden
-          if (this.currentIndex < this.docs.length - 1) {
-            this.currentIndex++;
-            this.currentDoc = this.docs[this.currentIndex];
-            this.startTime = Date.now();
-            this.currentScore = this.calculateScore(this.correctCount, this.timeElapsed);
-          } else {
-            this.endGame();
-          }
+      if (advance) {
+        // Im Spiel: bei korrekter Auswahl Zähler erhöhen
+        if (correct) this.correctCount++;
+        // Nächstes Dokument oder Spiel beenden
+        if (this.currentIndex < this.docs.length - 1) {
+          this.currentIndex++;
+          this.currentDoc = this.docs[this.currentIndex];
+          this.startTime = Date.now();
+          this.currentScore = this.calculateScore(this.correctCount, this.timeElapsed);
+        } else {
+          this.endGame();
         }
+      }
         this.disableButtons = false;
       }, 1000);
     },
 
-    // Demo: Auswahl einer Abteilung (nur visuelles Blinksignal, kein Fortschritt)
-    blinkDemoDept(deptName) {
-      this.processSelection(deptName, false);
-    },
-
     // Spiel: Auswahl einer Abteilung (normaler Fortschritt)
     selectDepartment(deptName) {
-      this.processSelection(deptName, true);
+      if (!this.currentDoc || this.disableButtons) return;
+        this.disableButtons = true;
+        const correct = (deptName === this.currentDoc.correctDept);
+        const now = Date.now();
+        this.currentDoc.userAnswer = deptName;
+        this.currentDoc.timeTaken = (now - this.startTime) / 1000;
+
+        // Add this document to reviewDocs
+        this.reviewDocs.push({
+          text: this.currentDoc.body || '',
+          correctDept: this.currentDoc.correctDept || '',
+          playerChoice: this.currentDoc.userAnswer || '',
+          isCorrect: this.currentDoc.isCorrect,
+          aiSuggestion: this.currentDoc.aiSuggestion || '',
+          highlightedBody: this.currentDoc.highlightedBody || '',
+        });
+
+      this.blinkDept(deptName, correct, true);
     },
 
     // Spiel beenden und Ergebnis verarbeiten

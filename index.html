@@ -142,7 +142,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
             <button class="dept-btn" 
                     :class="{'suggestion': aiMode && dept.name === docs[0]?.aiSuggestion}"
                     :data-name="dept.name"
-                    @click="blinkDemoDept(dept.name)">
+                    @click="blinkDept(dept.name, dept.name === docs[0]?.correctDept)">
               <span class="dept-icon" x-text="dept.icon"></span>
               <span class="dept-name" x-text="dept.name"></span>
               <span class="dept-description" x-text="dept.description"></span>
