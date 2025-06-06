@@ -100,6 +100,7 @@
   font-size: 1.5rem;
   padding: 0.7rem 1.5rem;
   background: #FDE603;
+  color: black;
   cursor: pointer;
   text-align: center;
   position: relative;
@@ -125,7 +126,7 @@
   top: -0.5em;
   right: -0.5em;
   background: #FDE603;
-  color: #000;
+  color: black;
   font-size: 1rem;
   padding: 0.2rem 0.4rem;
   border-radius: 3px;

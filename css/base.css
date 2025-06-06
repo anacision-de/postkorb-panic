@@ -66,6 +66,7 @@ input[type="email"] {
   font-size: 2rem;
   padding: 1.5rem 2rem;
   background: #FDE603;
+  color: black;
   border: none;
   outline: none;
   cursor: pointer;
@@ -120,8 +121,8 @@ input[type="email"] {
 
 /* Global layout container */
 .screen {
-  height: 100vh;
-  width: 100vw;
+  height: 100dvh;
+  width: 100dvw;
 }
 
 /* Logo image */
