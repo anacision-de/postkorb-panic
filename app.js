@@ -4,6 +4,8 @@ function appData() {
     screen: 'start',
     aiMode: false,
     disableButtons: false,
+    showScoreGain: false, // Anzeige des Score-Gewinns
+    scoreGainText: '', // Text für Score-Gewinn-Anzeige
     currentIndex: 0,
     currentDoc: null,
     timeElapsed: 0,
@@ -130,7 +132,7 @@ function appData() {
   },
 
   // Demo: Auswahl einer Abteilung (nur visuelles Blinksignal, kein Fortschritt)
-  blinkDept(deptName, correct, advance = false) {
+  doAnimation(deptName, correct, advance = false) {
     const buttons = document.querySelectorAll('.dept-btn');
     buttons.forEach(btn => {
       const name = btn.dataset.name?.trim();
@@ -142,6 +144,23 @@ function appData() {
         btn.classList.add('correct-blink');
       }
     });
+
+    if (advance){
+      this.scoreGainText = '+' + this.currentScore.toFixed(1);
+      this.showScoreGain = true;
+
+      setTimeout(() => {
+        // fade out (opacity 0) but leave text
+        this.showScoreGain = false;
+
+        // wait another 1s to let fade-out finish before clearing
+        setTimeout(() => {
+          this.scoreGainText = '';
+        }, 1000);
+      }, 1000);
+    }
+      
+
     setTimeout(() => {
       buttons.forEach(btn => {
         btn.classList.remove('correct-blink', 'wrong-blink', 'disabled');
@@ -186,7 +205,8 @@ function appData() {
           score: this.currentDoc.currentScore || 0,
         });
 
-      this.blinkDept(deptName, correct, true);
+      // Animationen
+      this.doAnimation(deptName, correct, true);
     },
 
     // Spiel beenden und Ergebnis verarbeiten

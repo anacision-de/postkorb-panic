@@ -35,15 +35,15 @@
     <div class="start-left">
       <img src="icon.svg" alt="Postkorb Panic">
       <p>Der Postkorb ist voll, der Druck steigt – und die nächste Mail wartet schon.
-Gut, dass du nicht allein bist: Eine KI steht bereit, um dir Vorschläge zur Einsortierung zu machen. <strong> Doch aufgepasst: </strong> Sie meint es gut, aber trifft nicht immer ins Schwarze.</p>
+Gut, dass Sie nicht alleine sind: Eine KI steht bereit, um Ihnen Vorschläge zur Einsortierung zu machen. <strong> Doch aufgepasst: </strong> Sie meint es gut, aber trifft nicht immer ins Schwarze.</p>
       <p>Du hast die Wahl:​ <br>
-Vertraue der KI – oder entscheide selbst.
+Vertrauen Sie der KI – oder entscheiden Sie selbst.
 <strong> Sortiere clever, denke schnell und behalte den Überblick </strong>, wenn die E-Mails im Sekundentakt eintrudeln.
 
 Am Ende zählt nur eins: <strong> Wird dein Postkorb zur Erfolgsgeschichte – oder zur Panikzone? </strong></p>
 
       <div class="nav-buttons two">
-        <p class="cta"> <strong> Möchten Sie Ihr Können unter Beweis stellen? </strong></p>
+        <p class="cta"> <strong> 👉 Jetzt starten und zeigen, wer hier den Überblick behält! </strong></p>
         <button class="start-btn" @click="screen = 'setup'">Start</button>
       </div>
     </div>
@@ -145,7 +145,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
             <button class="dept-btn" 
                     :class="{'suggestion': aiMode && dept.name === docs[0]?.aiSuggestion}"
                     :data-name="dept.name"
-                    @click="blinkDept(dept.name, dept.name === docs[0]?.correctDept)">
+                    @click="doAnimation(dept.name, dept.name === docs[0]?.correctDept)">
               <span class="dept-icon" x-text="dept.icon"></span>
               <span class="dept-name" x-text="dept.name"></span>
               <span class="dept-description" x-text="dept.description"></span>
@@ -165,7 +165,11 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
     <!-- Laufende Zeit & Score Anzeige -->
     <div class="game-status">
       <span>Zeit: <strong x-text="formatTime(timeElapsed)"></strong></span>
-      <span>Score: <strong x-text="totalScore.toFixed(1)"></strong></span>
+      <span>
+        Score: 
+        <strong x-text="totalScore.toFixed(1)"></strong>
+        <span x-text="scoreGainText" :class="{ 'score-gain': true, 'fade-in': showScoreGain, 'fade-out': !showScoreGain }"></span>
+      </span>
       <span>KI-Modus: <strong x-text="aiMode ? 'an' : 'aus'"></strong></span>
       <button class="abort-btn" @click="if (confirm('Möchten Sie das Spiel wirklich abbrechen?')) { resetGame(); screen = 'start'; }">Spiel abbrechen</button>
     </div>
