@@ -4,12 +4,12 @@ function appData() {
     screen: 'start',
     aiMode: false,
     disableButtons: false,
-    docs: [],           // 10 Dokumente pro Spielrunde
     currentIndex: 0,
     currentDoc: null,
     timeElapsed: 0,
     timerInterval: null,
-    currentScore: 0,
+    currentScore: 0, // Score für aktuelle Auswahl
+    totalScore: 0,
     correctCount: 0,
     resultsList: [],    // alle gespeicherten Ergebnisse
     leaderboard: [],    // Top-5 Einträge aus resultsList
@@ -24,11 +24,8 @@ function appData() {
     // Form fields
     playerName: '',
     playerEmail: '',
-    playerConsent: false,
-    // Flag für Antworten-Vergleich (Ergebnisansicht)
-    showAnswers: false,
     // Konstanten
-    maxTime: 180,       // maximale Zeit (Sekunden) für Diagramm X-Achse
+    minMaxTime: 180,       // minimale maximale Zeit (Sekunden) für Diagramm X-Achse
     maxCorrect: 10,     // maximale korrekte Antworten (Y-Achse)
     scatterWidth: 600,
     scatterHeight: 300,
@@ -58,6 +55,7 @@ function appData() {
       // Beispiel-Dokument für Vorschau im Setup-Screen generieren
       this.docs = this.generateDemoDoc();
       this.currentDoc = this.docs[0];
+      this.generateScatterPlot(); 
     },
 
     // Spiel starten (neue Runde)
@@ -79,21 +77,21 @@ function appData() {
       this.correctCount = 0;
       this.currentDoc = this.docs[0];
       this.currentDoc.userAnswer = null;
+      this.currentDoc.score = 0;
       this.startTime = Date.now();
+
       this.timeElapsed = 0;
       this.currentScore = 0;
+      this.totalScore = 0;
       this.currentResult = null;
       this.rank = null;
       this.percentile = null;
-      this.showAnswers = false;
       // Wechsel zum Spiel-Screen
       this.screen = 'game';
       // Timer starten (Sekundenzähler)
       if (this.timerInterval) clearInterval(this.timerInterval);
       this.timerInterval = setInterval(() => {
         this.timeElapsed++;
-        // Score laufend aktualisieren (basiert auf correctCount und timeElapsed)
-        this.currentScore = this.calculateScore(this.correctCount, this.timeElapsed);
       }, 1000);
     },
 
@@ -131,65 +129,64 @@ function appData() {
     return [demoDoc];
   },
 
-    // Auswahl einer Abteilung verarbeiten (gemeinsame Logik für Demo und Spiel)
-    processSelection(deptName, advance = true) {
-      if (!this.currentDoc || this.disableButtons) return;
-      this.disableButtons = true;
-      const correct = (deptName === this.currentDoc.correctDept);
-      const now = Date.now();
-      this.currentDoc.userAnswer = deptName;
-      this.currentDoc.timeTaken = (now - this.startTime) / 1000;
-
-      // Add this document to reviewDocs
-      this.reviewDocs.push({
-        text: this.currentDoc.body || '',
-        correctDept: this.currentDoc.correctDept || '',
-        playerChoice: this.currentDoc.userAnswer || '',
-        isCorrect: this.currentDoc.isCorrect,
-        aiSuggestion: this.currentDoc.aiSuggestion || '',
-        highlightedBody: this.currentDoc.highlightedBody || '',
-      });
-
-      const buttons = document.querySelectorAll('.dept-btn');
+  // Demo: Auswahl einer Abteilung (nur visuelles Blinksignal, kein Fortschritt)
+  blinkDept(deptName, correct, advance = false) {
+    const buttons = document.querySelectorAll('.dept-btn');
+    buttons.forEach(btn => {
+      const name = btn.dataset.name?.trim();
+      btn.classList.add('disabled');
+      if (name === deptName) {
+        btn.classList.add(correct ? 'correct-blink' : 'wrong-blink');
+      }
+      if (!correct && name === this.currentDoc.correctDept) {
+        btn.classList.add('correct-blink');
+      }
+    });
+    setTimeout(() => {
       buttons.forEach(btn => {
-        const name = btn.dataset.name?.trim();
-        btn.classList.add('disabled');
-        if (name === deptName) {
-          btn.classList.add(correct ? 'correct-blink' : 'wrong-blink');
-        }
-        if (!correct && name === this.currentDoc.correctDept) {
-          btn.classList.add('correct-blink');
-        }
+        btn.classList.remove('correct-blink', 'wrong-blink', 'disabled');
       });
-      setTimeout(() => {
-        buttons.forEach(btn => {
-          btn.classList.remove('correct-blink', 'wrong-blink', 'disabled');
-        });
-        if (advance) {
-          // Im Spiel: bei korrekter Auswahl Zähler erhöhen
-          if (correct) this.correctCount++;
-          // Nächstes Dokument oder Spiel beenden
-          if (this.currentIndex < this.docs.length - 1) {
-            this.currentIndex++;
-            this.currentDoc = this.docs[this.currentIndex];
-            this.startTime = Date.now();
-            this.currentScore = this.calculateScore(this.correctCount, this.timeElapsed);
-          } else {
-            this.endGame();
-          }
+      if (advance) {
+        // Im Spiel: bei korrekter Auswahl Zähler erhöhen
+        if (correct) this.correctCount++;
+        // Nächstes Dokument oder Spiel beenden
+        if (this.currentIndex < this.docs.length - 1) {
+          this.currentIndex++;
+          this.currentDoc = this.docs[this.currentIndex];
+          this.startTime = Date.now();
+        } else {
+          this.endGame();
         }
+      }
         this.disableButtons = false;
       }, 1000);
     },
 
-    // Demo: Auswahl einer Abteilung (nur visuelles Blinksignal, kein Fortschritt)
-    blinkDemoDept(deptName) {
-      this.processSelection(deptName, false);
-    },
-
     // Spiel: Auswahl einer Abteilung (normaler Fortschritt)
     selectDepartment(deptName) {
-      this.processSelection(deptName, true);
+      if (!this.currentDoc || this.disableButtons) return;
+        this.disableButtons = true;
+        const correct = (deptName === this.currentDoc.correctDept);
+        this.currentDoc.userAnswer = deptName;
+        this.currentDoc.timeTaken = (Date.now() - this.startTime) / 1000;
+  
+        this.currentScore = this.calculateScorePerQuestion(correct, this.currentDoc.timeTaken, this.currentDoc.aiSuggestion === deptName);
+        this.currentScore = Math.round(this.currentScore * 10) / 10; // auf 1 Dezimalstelle runden
+        this.totalScore += this.currentScore;
+        this.currentDoc.currentScore = this.currentScore;
+
+        // Add this document to reviewDocs
+        this.reviewDocs.push({
+          text: this.currentDoc.body || '',
+          correctDept: this.currentDoc.correctDept || '',
+          playerChoice: this.currentDoc.userAnswer || '',
+          isCorrect: this.currentDoc.isCorrect,
+          aiSuggestion: this.currentDoc.aiSuggestion || '',
+          highlightedBody: this.currentDoc.highlightedBody || '',
+          score: this.currentDoc.currentScore || 0,
+        });
+
+      this.blinkDept(deptName, correct, true);
     },
 
     // Spiel beenden und Ergebnis verarbeiten
@@ -198,13 +195,12 @@ function appData() {
       clearInterval(this.timerInterval);
       this.timerInterval = null;
       // Finalen Score berechnen
-      const finalScore = this.calculateScore(this.correctCount, this.timeElapsed);
-      this.currentScore = finalScore;
+      const finalScore = this.totalScore;
+      this.totalScore = finalScore;
       // Ergebnisobjekt erstellen
     this.currentResult = {
-      email: this.playerConsent ? this.playerEmail : '',
+      email: this.playerEmail,
       name: this.playerName,
-      consent: this.playerConsent,
       score: finalScore,
       totalTime: this.timeElapsed,
       date: new Date().toISOString(),
@@ -239,13 +235,13 @@ function appData() {
 
     savePlayerData() {
       // Collect game-level data
-      const finalScore = this.currentScore;
+      const finalScore = this.totalScore
+      ;
       const totalTime = this.timeElapsed;
       const name = this.playerName;
-      const email = (this.playerConsent && this.playerEmail && this.playerEmail.length > 3)
+      const email = (this.playerEmail && this.playerEmail.length > 3)
         ? this.playerEmail
         : '';
-      const consent = this.playerConsent;
       const aiMode = this.aiMode;
 
       // Collect per-document answers
@@ -255,14 +251,14 @@ function appData() {
         playerChoice: doc.userAnswer || '',
         aiSuggestion: doc.aiSuggestion || '',
         isCorrect: doc.userAnswer === doc.correctDept,
-        responseTime: doc.timeTaken || 0
+        responseTime: doc.timeTaken || 0,
+        score: doc.currentScore || 0,
       }));
 
       // Build result entry
       const entry = {
         name,
         email,
-        consent,
         score: finalScore,
         totalTime: totalTime,
         aiMode: aiMode,
@@ -284,7 +280,7 @@ function appData() {
     resetGame() {
       this.docs = [];
       this.answers = [];
-      this.currentScore = 0;
+      this.totalScore = 0;
       this.timeElapsed = 0;
       this.aiMode = false;
       this.currentDocIndex = 0;
@@ -293,7 +289,6 @@ function appData() {
       this.currentDoc = this.docs[0];
       this.playerName = '';
       this.playerEmail = '';
-      this.playerConsent = false;
       this.reviewDocs = [];
       this.reviewIndex = 0;
     },
@@ -301,19 +296,49 @@ function appData() {
     backToStart() {
       this.savePlayerData();
       this.resetGame();
+      this.generateScatterPlot();
       this.screen = "start";
+    },
+
+    calculateQuantile(arr, q) {
+      if (!arr.length) return this.minMaxTime;
+      const sorted = arr.slice().sort((a, b) => a - b);
+      const pos = (sorted.length - 1) * q;
+      const base = Math.floor(pos);
+      const rest = pos - base;
+      if (sorted[base + 1] !== undefined) {
+        return sorted[base] + rest * (sorted[base + 1] - sorted[base]);
+      } else {
+        return sorted[base];
+      }
+    },
+
+    generateScatterPlot() {
+      if (this.resultsList.length >= 1) {
+        const times = this.resultsList.map(r => r.totalTime || 0);
+        const quantile = this.calculateQuantile(times, 0.9);
+        this.maxTime = Math.max(this.minMaxTime, quantile);
+      } else {
+        this.maxTime = this.minMaxTime;
+      }
+      // These update the SVG bindings via Alpine.js
+      this.generateCircles();
+      this.generateTicks();
+      this.generateGrid();
     },
 
     // Streudiagramm: Datenpunkte (SVG <circle>) generieren
     generateCircles() {
-      console.log(this.resultsList)
       if (!Array.isArray(this.resultsList)) return '';
-      return this.resultsList.map(res => {
-        const cx = (res.totalTime / this.maxTime) * this.scatterWidth;
-        const cy = this.scatterHeight - (res.correct / this.maxCorrect * this.scatterHeight);
-        const fill = res.aiMode ? '#f1c40f' : '#333';
-        return `<circle cx="${cx}" cy="${cy}" r="6" fill="${fill}" stroke="#555" opacity="0.9" />`;
-      }).join('');
+      return this.resultsList
+        .filter(res => res.totalTime <= this.maxTime)  // Only include entries within maxTime
+        .map(res => {
+          const cx = (res.totalTime / this.maxTime) * this.scatterWidth;
+          const cy = this.scatterHeight - (res.correct / this.maxCorrect * this.scatterHeight);
+          const fill = res.aiMode ? '#f1c40f' : '#333';
+          return `<circle cx="${cx}" cy="${cy}" r="6" fill="${fill}" stroke="#555" opacity="0.9" />`;
+        })
+        .join('');
     },
     // Streudiagramm: Achsen-Ticks (SVG) generieren
     generateTicks() {
@@ -356,14 +381,29 @@ function appData() {
       return lines.join('');
     },
 
-    // Score berechnen aus Korrektheit und Zeit
-    calculateScore(correctCount, timeSec) {
-      const correctScore = (correctCount / 10) * 70;
-      const timeScore = (timeSec <= this.maxTime)
-        ? ((this.maxTime - timeSec) / this.maxTime) * 30
-        : 0;
-      return Math.round(correctScore + timeScore);
+    auxNonlinScore(timeTaken, scale, curve1, curve2) {
+        if (timeTaken > 0) {
+            return Math.pow(1 + Math.pow(timeTaken / scale, curve1), -curve2);
+        } else {
+            return 1;
+        }
     },
+
+    calculateScorePerQuestion(correct, time, aiSuggestionPicked, scale = 5.0, curve1 = 5.0, curve2 = 1.0, maxNegProp = 1.0) {
+      const maxPointsPerQuestion = 10.0;
+      
+      const auxScoreVal = this.auxNonlinScore(time, scale, curve1, curve2);
+      const posPoints = correct * maxPointsPerQuestion * auxScoreVal;
+      let negPoints = 0;
+
+      if (this.aiMode) {
+          negPoints = aiSuggestionPicked * (1 - correct) * maxPointsPerQuestion * maxNegProp * auxScoreVal;
+      }
+
+      const points = posPoints - negPoints;
+      return Math.max(points, 0);
+    },
+
 
     // Bestenliste (Top 5) aus resultsList aktualisieren
     updateLeaderboard() {

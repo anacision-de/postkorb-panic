@@ -61,7 +61,7 @@ Am Ende zählt nur eins: <strong> Wird dein Postkorb zur Erfolgsgeschichte – o
               <td x-text="entry.name ?? '–'"></td>
               <td x-text="formatTime(entry.totalTime)"></td>
               <td x-text="entry.correct"></td>
-              <td x-text="entry.score"></td>
+              <td x-text="entry.score.toFixed(1)"></td>
               <td x-text="entry.aiMode ? 'an' : 'aus'"></td>
             </tr>
           </template>
@@ -142,7 +142,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
             <button class="dept-btn" 
                     :class="{'suggestion': aiMode && dept.name === docs[0]?.aiSuggestion}"
                     :data-name="dept.name"
-                    @click="blinkDemoDept(dept.name)">
+                    @click="blinkDept(dept.name, dept.name === docs[0]?.correctDept)">
               <span class="dept-icon" x-text="dept.icon"></span>
               <span class="dept-name" x-text="dept.name"></span>
               <span class="dept-description" x-text="dept.description"></span>
@@ -162,7 +162,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
     <!-- Laufende Zeit & Score Anzeige -->
     <div class="game-status">
       <span>Zeit: <strong x-text="formatTime(timeElapsed)"></strong></span>
-      <span>Score: <strong x-text="currentScore"></strong></span>
+      <span>Score: <strong x-text="totalScore.toFixed(1)"></strong></span>
       <span>KI-Modus: <strong x-text="aiMode ? 'an' : 'aus'"></strong></span>
       <button class="abort-btn" @click="if (confirm('Möchten Sie das Spiel wirklich abbrechen?')) { resetGame(); screen = 'start'; }">Spiel abbrechen</button>
     </div>
@@ -215,9 +215,9 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       <img src="icon.svg" alt="Postkorb Panic">
       <h2>Geschafft! 😊</h2>
       <div class="result-values">
-        <p x-show="currentResult">⏱️ Benötigte Zeit: <strong x-text="formatTime(currentResult?.totalTime)"></strong></p>
+        <p x-show="currentResult">⏱️ Benötigte Zeit: <strong x-text="formatTime(timeElapsed)"></strong></p>
         <p x-show="currentResult">✅ Korrekte Antworten: <strong x-text="currentResult?.correct + '/10'"></strong></p>
-        <p x-show="currentResult">🏆 Score: <strong x-text="currentResult?.score"></strong></p>
+        <p x-show="currentResult">🏆 Score: <strong x-text="totalScore.toFixed(1)"></strong></p>
       </div>
       <p x-show="percentile !== null">
         Sie sind mit Ihrem Score besser als <strong x-text="percentile"></strong>% aller bisherigen Teilnehmenden!
@@ -252,10 +252,10 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
           <template x-for="(entry, idx) in leaderboard" :key="entry.name+idx">
             <tr :class="{highlight: currentResult && entry === currentResult}">
               <td x-text="idx+1"></td>
-              <td x-text="entry.name ?? (entry === currentResult ? 'entry.name' : '–')"></td>
+              <td x-text="entry.name"></td>
               <td x-text="formatTime(entry.totalTime)"></td>
               <td x-text="entry.correct"></td>
-              <td x-text="entry.score"></td>
+              <td x-text="entry.score.toFixed(1)"></td>
               <td x-text="entry.aiMode ? 'an' : 'aus'"></td>
             </tr>
           </template>
@@ -263,10 +263,10 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
           <template x-if="rank && rank > leaderboard.length">
             <tr class="highlight">
               <td x-text="rank"></td>
-              <td>Ihr Score</td>
-              <td x-text="formatTime(currentResult.time)"></td>
+              <td x-text="playerName"></td>
+              <td x-text="formatTime(timeElapsed)"></td>
               <td x-text="currentResult.correct"></td>
-              <td x-text="currentResult.score"></td>
+              <td x-text="currentResult.score.toFixed(1)"></td>
               <td x-text="currentResult.aiMode ? 'an' : 'aus'"></td>
             </tr>
           </template>
@@ -277,7 +277,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
         <h3>Antworten vergleichen</h3>
         <table class="compare-table">
           <thead>
-            <tr><th>#</th><th>Korrekte Abteilung</th><th>Ihre Antwort</th><th>KI-Vorschlag</th></tr>
+            <tr><th>#</th><th>Korrekte Abteilung</th><th>Ihre Antwort</th><th>KI-Vorschlag</th><th>Score</th></tr>
           </thead>
           <tbody>
             <template x-for="(doc, i) in docs" :key="i">
@@ -286,6 +286,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
                 <td x-text="doc.correctDept"></td>
                 <td x-text="doc.userAnswer ?? '–'"></td>
                 <td x-text="doc.aiSuggestion"></td>
+                <td x-text="(doc.currentScore ?? 0).toFixed(1)"></td>
               </tr>
             </template>
           </tbody>
