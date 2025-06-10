@@ -438,7 +438,7 @@ function appData() {
         if (a.correct !== b.correct) return b.correct - a.correct;
         return a.time - b.time;
       });
-      this.leaderboard = sorted.slice(0, 5);
+      this.leaderboard = sorted.slice(0, 10);
     },
 
     // Ergebnisse als JSON herunterladen
