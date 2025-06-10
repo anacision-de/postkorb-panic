@@ -42,7 +42,7 @@ Vertrauen Sie der KI – oder entscheiden Sie selbst.
 
 Am Ende zählt nur eins: <strong class="extra-bold"> Wird Ihr Postkorb zur Erfolgsgeschichte – oder zur Panikzone? </strong></p>
 
-      <div class="nav-buttons two">
+      <div class="nav-div">
         <p class="cta"> <strong class="extra-bold"> 👉 Jetzt starten und zeigen, wer hier den Überblick behält! </strong></p>
         <button class="start-btn" @click="screen = 'setup'">Start</button>
       </div>
@@ -239,7 +239,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       <div class="form">
         <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" @keydown.enter="$event.target.blur()"/>
       </div>
-      <div class="nav-buttons two">
+      <div class="nav-div">
         <button class="start-btn" @click="backToStart()">Absenden &amp; zum Start!</button>
       </div>
     </div>
@@ -331,7 +331,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
     <div class="modal-content">
       <h3>Gespeicherte Daten <button @click="showDataModal=false" class="close-btn">×</button></h3>
       <p><em>Zum Herunterladen der Daten auf den Button klicken</em></p>
-      <div class="nav-buttons two">
+      <div class="nav-div">
         <button class=start-btn @click="downloadJSON()">JSON herunterladen</button>
       </div>
     </div>
