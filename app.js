@@ -93,8 +93,8 @@ function appData() {
       // Timer starten (Sekundenzähler)
       if (this.timerInterval) clearInterval(this.timerInterval);
       this.timerInterval = setInterval(() => {
-        this.timeElapsed++;
-      }, 1000);
+        this.timeElapsed = Math.round((this.timeElapsed + 0.1) * 100) / 100;
+      }, 100);
     },
 
     highlightedHtml(html) {
@@ -218,15 +218,15 @@ function appData() {
       const finalScore = this.totalScore;
       this.totalScore = finalScore;
       // Ergebnisobjekt erstellen
-    this.currentResult = {
-      email: this.playerEmail,
-      name: this.playerName,
-      score: finalScore,
-      totalTime: this.timeElapsed,
-      date: new Date().toISOString(),
-      aiMode: this.aiMode,
-      correct: this.correctCount
-    };
+      this.currentResult = {
+        email: this.playerEmail,
+        name: this.playerName,
+        score: finalScore,
+        totalTime: this.timeElapsed,
+        date: new Date().toISOString(),
+        aiMode: this.aiMode,
+        correct: this.correctCount
+      };
       // Ergebnis in Liste speichern
       this.resultsList.push(this.currentResult);
       // Bestenliste & Rang aktualisieren
@@ -469,11 +469,8 @@ function appData() {
     // Hilfsfunktionen
     formatTime(seconds) {
       const m = Math.floor(seconds / 60);
-      const s = seconds % 60;
+      const s = Math.floor(seconds % 60);
       return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-    },
-    isCurrentResult(res) {
-      return this.currentResult && res === this.currentResult;
     },
   };
 }
