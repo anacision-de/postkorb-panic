@@ -58,6 +58,27 @@
 .doc-card .email-eval p {
   margin: 0.3em 0;
 }
+.arrow-btn {
+  background-color: #FDE603;
+  color: black;
+  padding: 0.5em 1em;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border: 0.05em solid rgba(0,0,0,0.1);
+  margin: 0 0.5rem;
+}
+.arrow-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.arrow-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
 .mark {
   background: #FDE603;
   padding: 0 0.2em;

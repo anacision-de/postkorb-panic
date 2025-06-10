@@ -449,6 +449,7 @@ function appData() {
         return a.time - b.time;
       });
       this.leaderboard = sorted.slice(0, 10);
+      console.log("Updated leaderboard:", this.leaderboard);
     },
 
     // Ergebnisse als JSON herunterladen

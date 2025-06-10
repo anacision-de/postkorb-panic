@@ -281,7 +281,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       </table>
       <!-- Antworten-Vergleich Tabelle -->
       <div class="answers-compare">
-        <h3>Antworten vergleichen</h3>
+        <h2>Antworten vergleichen</h2>
         <table class="compare-table">
           <thead>
             <tr><th>#</th><th>Korrekte Abteilung</th><th>Ihre Antwort</th><th>KI-Vorschlag</th><th>Score</th></tr>
@@ -301,9 +301,9 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       </div>
       <div class="doc-review" x-show="reviewDocs.length > 0">
         <div class="doc-nav">
-          <button @click="prevDoc" :disabled="reviewIndex <= 0">&larr;</button>
+          <button class="arrow-btn" @click="prevDoc" :disabled="reviewIndex <= 0">&larr;</button>
           <span x-text="`Dokument ${reviewIndex + 1} von ${reviewDocs.length}`"></span>
-          <button @click="nextDoc" :disabled="reviewIndex >= reviewDocs.length - 1">&rarr;</button>
+          <button class="arrow-btn" @click="nextDoc" :disabled="reviewIndex >= reviewDocs.length - 1">&rarr;</button>
         </div>
 
         <div class="doc-card">
