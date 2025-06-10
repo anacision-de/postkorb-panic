@@ -173,12 +173,22 @@ function appData() {
           this.currentIndex++;
           this.currentDoc = this.docs[this.currentIndex];
           this.startTime = Date.now();
+
+          this.scrollEmailToTop();
         } else {
           this.endGame();
         }
       }
         this.disableButtons = false;
       }, 1000);
+    },
+
+    scrollEmailToTop() {
+      // Delay to ensure DOM update from currentDoc
+      this.$nextTick(() => {
+        const el = document.querySelector('.game-screen .card-stack');
+        if (el) el.scrollTop = 0;
+      });
     },
 
     // Spiel: Auswahl einer Abteilung (normaler Fortschritt)
