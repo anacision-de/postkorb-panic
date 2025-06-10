@@ -1,6 +1,6 @@
 /* Styles for the Game screen (playing interface) */
 .game-screen {
-  background: #363C48;
+  background: #444;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -11,7 +11,7 @@
 .game-status {
   display: flex;
   justify-content: space-around;
-  background: #363C48;
+  background: #444;
   padding: 10px;
   font-size: 1.8rem;
 }
@@ -64,7 +64,7 @@
   text-align: center;
 }
 .progress-bar {
-  background: #6D6A78;
+  background: #444;
   height: 12px;
   border-radius: 6px;
   overflow: hidden;
@@ -103,7 +103,7 @@
 /* Department selection buttons */
 .footer-controls {
   flex-shrink: 0;
-  background: #333;
+  background: #444;
 }
 
 .departments {
