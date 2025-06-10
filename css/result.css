@@ -55,8 +55,12 @@
   padding: 1em;
   border-radius: 6px;
 }
-.doc-card .email-eval p {
+.email-eval p {
   margin: 0.3em 0;
+}
+
+.email-eval {
+  margin: 0.9em 0;
 }
 .arrow-btn {
   background-color: #FDE603;

@@ -65,10 +65,9 @@
 }
 .progress-bar {
   background: #444;
-  height: 12px;
-  border-radius: 6px;
+  height: 0.7em;
   overflow: hidden;
-  margin-bottom: 6px;
+  margin-bottom: 0.2em;
 }
 .progress-fill {
   height: 100%;
@@ -170,7 +169,6 @@
   cursor: pointer;
   color: #ccc;
 }
-
 
 /* Blink animations for correct/wrong selection */
 @keyframes blink-green {
