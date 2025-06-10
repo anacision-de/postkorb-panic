@@ -446,7 +446,7 @@ function appData() {
       const sorted = this.resultsList.slice().sort((a, b) => {
         if (b.score !== a.score) return b.score - a.score;
         if (a.correct !== b.correct) return b.correct - a.correct;
-        return a.time - b.time;
+        return a.totalTime - b.totalTime;
       });
       this.leaderboard = sorted.slice(0, 10);
       console.log("Updated leaderboard:", this.leaderboard);
