@@ -102,7 +102,7 @@ Am Ende zählt nur eins: <strong> Wird Ihr Postkorb zur Erfolgsgeschichte – od
       <img src="icon.svg" alt="Postkorb Panic">
       <h2>Bereit für Postkorb Panic?</h2>
       <p>Bevor es losgeht — wie dürfen wir Sie nennen?</p>
-      <input type="text" placeholder="Spielername" x-model="playerName" />
+      <input type="text" placeholder="Spielername" x-model="playerName" @keydown.enter="$event.target.blur()"/>
 
       <div class="ki-toggle">
         <p> <strong> Möchten Sie mit KI-Unterstützung spielen?</strong><br>
@@ -239,7 +239,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
         (Keine Werbemails – nur praxisrelevante Inhalte für Führung & KI-Nutzung.)</p> 
       <!-- Formular für Name/Email -->
       <div class="form">
-        <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" />
+        <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" @keydown.enter="$event.target.blur()"/>
       </div>
       <div class="nav-buttons two">
         <button class="start-btn" @click="backToStart()">Absenden &amp; zum Start!</button>
