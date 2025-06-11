@@ -102,13 +102,11 @@
 /* Department selection buttons */
 .footer-controls {
   flex-shrink: 0;
-  background: #444;
+  background: #333;
 }
 
 .departments {
   display: flex;
-  /* flex-wrap: wrap; */
-  /* justify-content: center; */
   padding: 1rem;
   gap: 1rem;
 }
