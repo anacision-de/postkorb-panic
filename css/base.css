@@ -18,6 +18,16 @@ body.app {
   touch-action: manipulation; /* improved touch responsiveness */
 }
 
+/* Remove gray highlight on tap for buttons and links */
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Custom active state for buttons and links */
+button:active, a:active {
+  opacity: 0.6;
+}
+
 /* Typography and elements */
 h1 {
   font-size: 2.5rem;
