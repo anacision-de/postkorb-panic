@@ -93,8 +93,8 @@ function appData() {
       // Timer starten (Sekundenzähler)
       if (this.timerInterval) clearInterval(this.timerInterval);
       this.timerInterval = setInterval(() => {
-        this.timeElapsed++;
-      }, 1000);
+        this.timeElapsed = Math.round((this.timeElapsed + 0.1) * 100) / 100;
+      }, 100);
     },
 
     highlightedHtml(html) {
@@ -173,12 +173,22 @@ function appData() {
           this.currentIndex++;
           this.currentDoc = this.docs[this.currentIndex];
           this.startTime = Date.now();
+
+          this.scrollEmailToTop();
         } else {
           this.endGame();
         }
       }
         this.disableButtons = false;
       }, 1000);
+    },
+
+    scrollEmailToTop() {
+      // Delay to ensure DOM update from currentDoc
+      this.$nextTick(() => {
+        const el = document.querySelector('.game-screen .card-stack');
+        if (el) el.scrollTop = 0;
+      });
     },
 
     // Spiel: Auswahl einer Abteilung (normaler Fortschritt)
@@ -189,7 +199,7 @@ function appData() {
         this.currentDoc.userAnswer = deptName;
         this.currentDoc.timeTaken = (Date.now() - this.startTime) / 1000;
   
-        this.currentScore = this.calculateScorePerQuestion(correct, this.currentDoc.timeTaken, this.currentDoc.aiSuggestion === deptName);
+        this.currentScore = this.calculateScorePerQuestion(correct, this.currentDoc.timeTaken, this.currentDoc.aiSuggestion === this.currentDoc.correctDept);
         this.currentScore = Math.round(this.currentScore * 10) / 10; // auf 1 Dezimalstelle runden
         this.totalScore += this.currentScore;
         this.currentDoc.currentScore = this.currentScore;
@@ -218,15 +228,15 @@ function appData() {
       const finalScore = this.totalScore;
       this.totalScore = finalScore;
       // Ergebnisobjekt erstellen
-    this.currentResult = {
-      email: this.playerEmail,
-      name: this.playerName,
-      score: finalScore,
-      totalTime: this.timeElapsed,
-      date: new Date().toISOString(),
-      aiMode: this.aiMode,
-      correct: this.correctCount
-    };
+      this.currentResult = {
+        email: this.playerEmail,
+        name: this.playerName,
+        score: finalScore,
+        totalTime: this.timeElapsed,
+        date: new Date().toISOString(),
+        aiMode: this.aiMode,
+        correct: this.correctCount
+      };
       // Ergebnis in Liste speichern
       this.resultsList.push(this.currentResult);
       // Bestenliste & Rang aktualisieren
@@ -409,18 +419,19 @@ function appData() {
         }
     },
 
-    calculateScorePerQuestion(correct, time, aiSuggestionPicked, scale = 5.0, curve1 = 5.0, curve2 = 1.0, maxNegProp = 1.0) {
+    calculateScorePerQuestion(correct, time, aiSuggestionCorrect, scale = 5.0, curve1 = 5.0, curve2 = 1.0, maxBonusProp = 1.0) {
       const maxPointsPerQuestion = 10.0;
       
       const auxScoreVal = this.auxNonlinScore(time, scale, curve1, curve2);
       const posPoints = correct * maxPointsPerQuestion * auxScoreVal;
-      let negPoints = 0;
+      let bonusPoints = 0;
 
       if (this.aiMode) {
-          negPoints = aiSuggestionPicked * (1 - correct) * maxPointsPerQuestion * maxNegProp * auxScoreVal;
+        // Bonuspoints wenn AI-Vorhersage falsch und Spielerantwort korrekt
+        bonusPoints = (1-aiSuggestionCorrect) * correct * maxPointsPerQuestion * maxBonusProp * auxScoreVal;
       }
 
-      const points = posPoints - negPoints;
+      const points = posPoints + bonusPoints;
       return Math.max(points, 0);
     },
 
@@ -435,9 +446,9 @@ function appData() {
       const sorted = this.resultsList.slice().sort((a, b) => {
         if (b.score !== a.score) return b.score - a.score;
         if (a.correct !== b.correct) return b.correct - a.correct;
-        return a.time - b.time;
+        return a.totalTime - b.totalTime;
       });
-      this.leaderboard = sorted.slice(0, 5);
+      this.leaderboard = sorted.slice(0, 10);
     },
 
     // Ergebnisse als JSON herunterladen
@@ -468,11 +479,8 @@ function appData() {
     // Hilfsfunktionen
     formatTime(seconds) {
       const m = Math.floor(seconds / 60);
-      const s = seconds % 60;
+      const s = Math.floor(seconds % 60);
       return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-    },
-    isCurrentResult(res) {
-      return this.currentResult && res === this.currentResult;
     },
   };
 }

@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <!-- Homescreen version in fullscreen -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="theme-color" content="#444444">
@@ -35,15 +35,15 @@
     <div class="start-left">
       <img src="icon.svg" alt="Postkorb Panic">
       <p>Der Postkorb ist voll, der Druck steigt – und die nächste Mail wartet schon.
-Gut, dass Sie nicht alleine sind: Eine KI steht bereit, um Ihnen Vorschläge zur Einsortierung zu machen. <strong> Doch aufgepasst: </strong> Sie meint es gut, aber trifft nicht immer ins Schwarze.</p>
-      <p>Sie haben die Wahl:​ <br>
+Gut, dass Sie nicht alleine sind: Eine KI steht bereit, um Ihnen Vorschläge zur Einsortierung zu machen. <strong class="extra-bold"> Doch aufgepasst: </strong> Sie meint es gut, aber trifft nicht immer ins Schwarze.</p>
+      <p>Sie haben die Wahl: <br>
 Vertrauen Sie der KI – oder entscheiden Sie selbst.
-<strong> Sortieren Sie clever, denken Sie schnell und behalten Sie den Überblick </strong>, wenn die E-Mails im Sekundentakt eintrudeln.
+<strong class="extra-bold"> Sortieren Sie clever, denken Sie schnell und behalten Sie den Überblick </strong>, wenn die E-Mails im Sekundentakt eintrudeln.
 
-Am Ende zählt nur eins: <strong> Wird Ihr Postkorb zur Erfolgsgeschichte – oder zur Panikzone? </strong></p>
+Am Ende zählt nur eins: <strong class="extra-bold"> Wird Ihr Postkorb zur Erfolgsgeschichte – oder zur Panikzone? </strong></p>
 
-      <div class="nav-buttons two">
-        <p class="cta"> <strong> 👉 Jetzt starten und zeigen, wer hier den Überblick behält! </strong></p>
+      <div class="nav-div">
+        <p class="cta"> <strong class="extra-bold"> 👉 Jetzt starten und zeigen, wer hier den Überblick behält! </strong></p>
         <button class="start-btn" @click="screen = 'setup'">Start</button>
       </div>
     </div>
@@ -102,11 +102,11 @@ Am Ende zählt nur eins: <strong> Wird Ihr Postkorb zur Erfolgsgeschichte – od
       <img src="icon.svg" alt="Postkorb Panic">
       <h2>Bereit für Postkorb Panic?</h2>
       <p>Bevor es losgeht — wie dürfen wir Sie nennen?</p>
-      <input type="text" placeholder="Spielername" x-model="playerName" />
+      <input type="text" placeholder="Spielername" x-model="playerName" @keydown.enter="$event.target.blur()"/>
 
       <div class="ki-toggle">
-        <p> <strong> Möchten Sie mit KI-Unterstützung spielen?</strong><br>
-Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<br> <strong> Sie treffen immer die letzte Entscheidung – aber ein kluger Vorschlag kann helfen! </strong>​</p>
+        <p> <strong class="extra-bold"> Möchten Sie mit KI-Unterstützung spielen?</strong><br>
+Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<br> <strong class="extra-bold"> Sie treffen immer die letzte Entscheidung – aber ein kluger Vorschlag kann helfen! </strong>​</p>
         <p>
           Wählen Sie Ihren Spielmodus:<br>
           ✅ Mit KI-Hilfe<br>
@@ -120,10 +120,8 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
           <span class="slider"></span>
         </label>
       </div>
-      <div class="nav-buttons">
-        <button class="start-btn" @click="startGame()">Los!</button>
-        <button class="start-btn cancel" @click="resetGame(); screen = 'start'">Zurück</button>
-      </div>
+      <button class="start-btn" @click="startGame()">Los!</button>
+      <button class="back-btn" @click="resetGame(); screen = 'start'">Spiel abbrechen</button>
     </div>
 
     <div class="start-right">
@@ -222,12 +220,12 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       <img src="icon.svg" alt="Postkorb Panic">
       <h2>Geschafft! 😊</h2>
       <div class="result-values">
-        <p x-show="currentResult">⏱️ Benötigte Zeit: <strong x-text="formatTime(timeElapsed)"></strong></p>
-        <p x-show="currentResult">✅ Korrekte Antworten: <strong x-text="currentResult?.correct + '/10'"></strong></p>
-        <p x-show="currentResult">🏆 Score: <strong x-text="totalScore.toFixed(1)"></strong></p>
+        <p x-show="currentResult">⏱️ Benötigte Zeit: <strong class="extra-bold" x-text="formatTime(timeElapsed)"></strong></p>
+        <p x-show="currentResult">✅ Korrekte Antworten: <strong class="extra-bold" x-text="currentResult?.correct + '/10'"></strong></p>
+        <p x-show="currentResult">🏆 Score: <strong class="extra-bold" x-text="totalScore.toFixed(1)"></strong></p>
       </div>
       <p x-show="percentile !== null">
-        Sie sind mit Ihrem Score besser als <strong x-text="percentile"></strong>% aller bisherigen Teilnehmenden!
+        Sie sind mit Ihrem Score besser als <strong class="extra-bold" x-text="percentile"></strong>% aller bisherigen Teilnehmenden!
       </p>
       <p>
         Wenn Sie möchten, dass auch Ihr Team vom Erlebnis Postkorb Panic profitiert, bieten wir Ihnen mehr als nur ein Spiel:📬 Fordern Sie die Onlineversion für Ihr Team an – ideal für Schulungen, Teamtage oder interne Weiterbildungen.📊 Zusätzlich erhalten Sie eine strukturierte Auswertung aller relevanten Spiel-Kennzahlen – aufbereitet in einem kompakten Whitepaper mit Erkenntnissen zu Entscheidungsverhalten, Reaktionsschnelligkeit und KI-Nutzung.</p>
@@ -239,9 +237,9 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
         (Keine Werbemails – nur praxisrelevante Inhalte für Führung & KI-Nutzung.)</p> 
       <!-- Formular für Name/Email -->
       <div class="form">
-        <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" />
+        <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" @keydown.enter="$event.target.blur()"/>
       </div>
-      <div class="nav-buttons two">
+      <div class="nav-div">
         <button class="start-btn" @click="backToStart()">Absenden &amp; zum Start!</button>
       </div>
     </div>
@@ -281,7 +279,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       </table>
       <!-- Antworten-Vergleich Tabelle -->
       <div class="answers-compare">
-        <h3>Antworten vergleichen</h3>
+        <h2>Antworten vergleichen</h2>
         <table class="compare-table">
           <thead>
             <tr><th>#</th><th>Korrekte Abteilung</th><th>Ihre Antwort</th><th>KI-Vorschlag</th><th>Score</th></tr>
@@ -301,9 +299,17 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       </div>
       <div class="doc-review" x-show="reviewDocs.length > 0">
         <div class="doc-nav">
-          <button @click="prevDoc" :disabled="reviewIndex <= 0">&larr;</button>
+          <button class="arrow-btn" @click="prevDoc" :disabled="reviewIndex <= 0">&larr;</button>
           <span x-text="`Dokument ${reviewIndex + 1} von ${reviewDocs.length}`"></span>
-          <button @click="nextDoc" :disabled="reviewIndex >= reviewDocs.length - 1">&rarr;</button>
+          <button class="arrow-btn" @click="nextDoc" :disabled="reviewIndex >= reviewDocs.length - 1">&rarr;</button>
+        </div>
+
+        <div class="email-eval">
+          <p><strong class="extra-bold">Korrekte Abteilung:</strong> <span x-text="reviewDocs[reviewIndex]?.correctDept || '–'"></span></p>
+          <p><strong class="extra-bold">KI-Vorschlag:</strong> <span x-text="reviewDocs[reviewIndex]?.aiSuggestion || '–'"></span></p>
+          <template x-if="reviewDocs[reviewIndex]?.playerChoice && reviewDocs[reviewIndex].playerChoice !== reviewDocs[reviewIndex].correctDept">
+            <p><strong class="extra-bold">Ihre Wahl:</strong> <span x-text="reviewDocs[reviewIndex].playerChoice"></span></p>
+          </template>
         </div>
 
         <div class="doc-card">
@@ -312,13 +318,6 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
             <div><strong>An:</strong> verwaltung@postkorb.de</div>
           </div>
           <div class="email-body" x-html="reviewDocs[reviewIndex]?.highlightedBody || ''"></div>
-          <div class="email-eval">
-            <p><strong>Korrekte Abteilung:</strong> <span x-text="reviewDocs[reviewIndex]?.correctDept || '–'"></span></p>
-            <p><strong>KI-Vorschlag:</strong> <span x-text="reviewDocs[reviewIndex]?.aiSuggestion || '–'"></span></p>
-            <template x-if="reviewDocs[reviewIndex]?.playerChoice && reviewDocs[reviewIndex].playerChoice !== reviewDocs[reviewIndex].correctDept">
-              <p><strong>Ihre Wahl:</strong> <span x-text="reviewDocs[reviewIndex].playerChoice"></span></p>
-            </template>
-          </div>
         </div>
       </div>
       <div class="logo">
@@ -332,7 +331,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
     <div class="modal-content">
       <h3>Gespeicherte Daten <button @click="showDataModal=false" class="close-btn">×</button></h3>
       <p><em>Zum Herunterladen der Daten auf den Button klicken</em></p>
-      <div class="nav-buttons two">
+      <div class="nav-div">
         <button class=start-btn @click="downloadJSON()">JSON herunterladen</button>
       </div>
     </div>
