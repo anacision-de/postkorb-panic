@@ -34,16 +34,16 @@
   <div x-show="screen === 'start'" x-cloak class="screen start-screen">
     <div class="start-left">
       <img src="icon.svg" alt="Postkorb Panic">
-      <p>Der Postkorb ist voll, der Druck steigt – und die nächste Mail wartet schon.
-Gut, dass Sie nicht alleine sind: Eine KI steht bereit, um Ihnen Vorschläge zur Einsortierung zu machen. <strong class="extra-bold"> Doch aufgepasst: </strong> Sie meint es gut, aber trifft nicht immer ins Schwarze.</p>
+      <p>Der Postkorb ist voll, der Druck steigt — und die nächste Mail wartet schon.
+Gut, dass Sie nicht alleine sind: Eine KI steht bereit, um Ihnen Vorschläge zur Einsortierung zu machen. <strong> Doch aufgepasst: </strong> Sie meint es gut, aber trifft nicht immer ins Schwarze.</p>
       <p>Sie haben die Wahl: <br>
-Vertrauen Sie der KI – oder entscheiden Sie selbst.
-<strong class="extra-bold"> Sortieren Sie clever, denken Sie schnell und behalten Sie den Überblick </strong>, wenn die E-Mails im Sekundentakt eintrudeln.
+Vertrauen Sie der KI — oder entscheiden Sie selbst.
+<strong> Sortieren Sie clever, denken Sie schnell und behalten Sie den Überblick </strong>, wenn die E-Mails im Sekundentakt eintrudeln.
 
-Am Ende zählt nur eins: <strong class="extra-bold"> Wird Ihr Postkorb zur Erfolgsgeschichte – oder zur Panikzone? </strong></p>
+Am Ende zählt nur eins: <strong> Wird Ihr Postkorb zur Erfolgsgeschichte — oder zur Panikzone? </strong></p>
 
       <div class="nav-div">
-        <p class="cta"> <strong class="extra-bold"> 👉 Jetzt starten und zeigen, wer hier den Überblick behält! </strong></p>
+        <p class="cta"> <strong> 👉 Jetzt starten und zeigen, wer hier den Überblick behält! </strong></p>
         <button class="start-btn" @click="screen = 'setup'">Start</button>
       </div>
     </div>
@@ -105,14 +105,12 @@ Am Ende zählt nur eins: <strong class="extra-bold"> Wird Ihr Postkorb zur Erfol
       <input type="text" placeholder="Spielername" x-model="playerName" @keydown.enter="$event.target.blur()"/>
 
       <div class="ki-toggle">
-        <p> <strong class="extra-bold"> Möchten Sie mit KI-Unterstützung spielen?</strong><br>
-Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<br> <strong class="extra-bold"> Sie treffen immer die letzte Entscheidung – aber ein kluger Vorschlag kann helfen! </strong>​</p>
+        <p> <strong> Möchten Sie mit KI-Unterstützung spielen?</strong><br>
+Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<br> <strong> Sie treffen immer die letzte Entscheidung — aber ein kluger Vorschlag kann helfen! </strong></p>
         <p>
           Wählen Sie Ihren Spielmodus:<br>
-          ✅ Mit KI-Hilfe<br>
-          Die KI schlägt vor, Sie sortieren. Ideal zum Üben, Lernen und Schnellsein.<br>
-          ❌ Ohne KI<br>
-          Alles liegt in Ihrer Hand. Nur Sie, Ihr Verstand – und der Postkorb.
+          <strong>✅ Mit KI-Hilfe:</strong> Die KI schlägt vor und markiert relevante Wörter, Sie sortieren. Die perfekte Unterstützung.<br>
+          <strong>❌ Ohne KI:</strong> Alles liegt in Ihrer Hand. Nur Sie, Ihr Verstand — und der Postkorb.
         </p>
         <label class="slider-label">
           KI-Unterstützung:
@@ -126,12 +124,12 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
 
     <div class="start-right">
       <h2>So funktioniert das Spiel</h2>
-      <p>Sie sehen eine eingehende E-Mail und entscheiden, an welche Abteilung sie weitergeleitet werden soll. Wählen Sie dazu die korrekte Abteilung unterhalb der E-Mail aus, an die die E-Mail weitergeleitet werden soll.</p>
+      <p>Sie sehen eine eingehende E-Mail und entscheiden, an welche Abteilung sie weitergeleitet werden soll. Wählen Sie dazu die korrekte Abteilung unterhalb der E-Mail aus, an die die E-Mail weitergeleitet werden soll. Je schneller Sie die E-Mail korrekt zuordnen, desto mehr Punkte bekommen Sie.</p>
       
       <h3>Beispiel</h3>
       <div class="email-card-setup">
         <div class="email-meta">
-          <div><strong>Von:</strong> <span>user@outlook.de</span></div>
+          <div><strong>Von:</strong> <span>nutzer@outlook.de</span></div>
           <div><strong>An:</strong> <span>verwaltung@postkorb.de</span></div>
         </div>
         <p class="email-body" x-show="!aiMode" x-text="docs[0]?.body"></p>
@@ -184,7 +182,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
     <div class="card-stack">
       <div class="email-card">
         <div class="email-meta">
-          <div><strong>Von:</strong> <span>user@outlook.de</span></div>
+          <div><strong>Von:</strong> <span>nutzer@outlook.de</span></div>
           <div><strong>An:</strong> <span>verwaltung@postkorb.de</span></div>
         </div>
         <div class="email-body">
@@ -220,21 +218,21 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       <img src="icon.svg" alt="Postkorb Panic">
       <h2>Geschafft! 😊</h2>
       <div class="result-values">
-        <p x-show="currentResult">⏱️ Benötigte Zeit: <strong class="extra-bold" x-text="formatTime(timeElapsed)"></strong></p>
-        <p x-show="currentResult">✅ Korrekte Antworten: <strong class="extra-bold" x-text="currentResult?.correct + '/10'"></strong></p>
-        <p x-show="currentResult">🏆 Score: <strong class="extra-bold" x-text="totalScore.toFixed(1)"></strong></p>
+        <p x-show="currentResult">⏱️ Benötigte Zeit: <strong x-text="formatTime(timeElapsed)"></strong></p>
+        <p x-show="currentResult">✅ Korrekte Antworten: <strong x-text="currentResult?.correct + '/10'"></strong></p>
+        <p x-show="currentResult">🏆 Score: <strong x-text="totalScore.toFixed(1)"></strong></p>
       </div>
       <p x-show="percentile !== null">
-        Sie sind mit Ihrem Score besser als <strong class="extra-bold" x-text="percentile"></strong>% aller bisherigen Teilnehmenden!
+        Sie sind mit Ihrem Score besser als <strong x-text="percentile"></strong>% aller bisherigen Teilnehmenden!
       </p>
       <p>
-        Wenn Sie möchten, dass auch Ihr Team vom Erlebnis Postkorb Panic profitiert, bieten wir Ihnen mehr als nur ein Spiel:📬 Fordern Sie die Onlineversion für Ihr Team an – ideal für Schulungen, Teamtage oder interne Weiterbildungen.📊 Zusätzlich erhalten Sie eine strukturierte Auswertung aller relevanten Spiel-Kennzahlen – aufbereitet in einem kompakten Whitepaper mit Erkenntnissen zu Entscheidungsverhalten, Reaktionsschnelligkeit und KI-Nutzung.</p>
-      <p>
-        Geben Sie einfach Ihre geschäftliche E-Mail-Adresse an, und wir senden Ihnen: <br>
-        🔗 Einen Zugang zur Onlineversion von Postkorb Panic <br>
-        📄 Ein Whitepaper mit den zentralen Erkenntnissen aus dem Spiel <br>
-        📊 Eine Übersicht der relevanten Metriken für Reflexion und Transfer in den Arbeitsalltag <br>
-        (Keine Werbemails – nur praxisrelevante Inhalte für Führung & KI-Nutzung.)</p> 
+        <strong>Wenn Sie möchten, dass auch Ihr Team vom Erlebnis Postkorb Panic profitiert, geben Sie einfach Ihre geschäftliche E-Mail-Adresse an. Wir senden Ihnen:</strong> <br>
+        🔗 Einen Zugang zur Onlineversion von Postkorb Panic — ideal für Schulungen, Teamtage oder interne Weiterbildungen. <br>
+        📄 Ein kompaktes Whitepaper mit den zentralen Erkenntnissen aus dem Spiel, inklusive Auswertungen zu Entscheidungsverhalten, Reaktionsgeschwindigkeit und KI-Nutzung. <br>
+        📊 Eine Übersicht der relevanten Metriken für Reflexion und Transfer in den Arbeitsalltag. <br>
+        <br>
+        <small>(Keine Werbemails — nur praxisrelevante Inhalte für Führung und KI-Nutzung.)</small>
+      </p>
       <!-- Formular für Name/Email -->
       <div class="form">
         <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" @keydown.enter="$event.target.blur()"/>
@@ -305,16 +303,16 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
         </div>
 
         <div class="email-eval">
-          <p><strong class="extra-bold">Korrekte Abteilung:</strong> <span x-text="reviewDocs[reviewIndex]?.correctDept || '–'"></span></p>
-          <p><strong class="extra-bold">KI-Vorschlag:</strong> <span x-text="reviewDocs[reviewIndex]?.aiSuggestion || '–'"></span></p>
+          <p><strong>Korrekte Abteilung:</strong> <span x-text="reviewDocs[reviewIndex]?.correctDept || '–'"></span></p>
+          <p><strong>KI-Vorschlag:</strong> <span x-text="reviewDocs[reviewIndex]?.aiSuggestion || '–'"></span></p>
           <template x-if="reviewDocs[reviewIndex]?.playerChoice && reviewDocs[reviewIndex].playerChoice !== reviewDocs[reviewIndex].correctDept">
-            <p><strong class="extra-bold">Ihre Wahl:</strong> <span x-text="reviewDocs[reviewIndex].playerChoice"></span></p>
+            <p><strong>Ihre Wahl:</strong> <span x-text="reviewDocs[reviewIndex].playerChoice"></span></p>
           </template>
         </div>
 
         <div class="doc-card">
           <div class="email-meta">
-            <div><strong>Von:</strong> user@outlook.de</div>
+            <div><strong>Von:</strong> nutzer@outlook.de</div>
             <div><strong>An:</strong> verwaltung@postkorb.de</div>
           </div>
           <div class="email-body" x-html="reviewDocs[reviewIndex]?.highlightedBody || ''"></div>

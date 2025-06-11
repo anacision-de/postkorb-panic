@@ -18,6 +18,10 @@ body.app {
   touch-action: manipulation; /* improved touch responsiveness */
 }
 
+strong {
+  font-weight: 900;
+}
+
 /* Remove gray highlight on tap for buttons and links */
 button, a {
   -webkit-tap-highlight-color: transparent;
@@ -141,8 +145,4 @@ input[type="email"] {
   height: auto;
   margin: 0.1em;
   object-fit: contain;
-}
-
-.extra-bold {
-  font-weight: 1000;
 }

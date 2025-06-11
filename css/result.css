@@ -69,10 +69,10 @@
   font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  border: 0.05em solid rgba(0,0,0,0.1);
+  transition: transform 0.1s ease;
   margin: 0 0.5rem;
+  outline: none;
+  border: none;
 }
 .arrow-btn:disabled {
   opacity: 0.5;
