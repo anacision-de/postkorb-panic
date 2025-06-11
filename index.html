@@ -304,10 +304,8 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
 
         <div class="email-eval">
           <p><strong>Korrekte Abteilung:</strong> <span x-text="reviewDocs[reviewIndex]?.correctDept || '–'"></span></p>
+          <p><strong>Ihre Antwort:</strong> <span x-text="reviewDocs[reviewIndex].playerChoice"></span></p>
           <p><strong>KI-Vorschlag:</strong> <span x-text="reviewDocs[reviewIndex]?.aiSuggestion || '–'"></span></p>
-          <template x-if="reviewDocs[reviewIndex]?.playerChoice && reviewDocs[reviewIndex].playerChoice !== reviewDocs[reviewIndex].correctDept">
-            <p><strong>Ihre Wahl:</strong> <span x-text="reviewDocs[reviewIndex].playerChoice"></span></p>
-          </template>
         </div>
 
         <div class="doc-card">
