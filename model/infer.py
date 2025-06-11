@@ -58,6 +58,7 @@ def _attribution_to_html(text: str, attribution: list[tuple[str, float]]) -> str
         "!",
         "?",
         ".",
+        ":",
         "@",
         "als",
         "auf",
