@@ -419,18 +419,16 @@ function appData() {
         }
     },
 
-    calculateScorePerQuestion(correct, time, aiSuggestionCorrect, scale = 5.0, curve1 = 5.0, curve2 = 1.0, maxBonusProp = 1.0) {
+    calculateScorePerQuestion(correct, time, aiSuggestionCorrect, scale = 5.3, curve1 = 6.0, curve2 = 0.4, maxBonusProp = 1.0) {
       const maxPointsPerQuestion = 10.0;
       
       const auxScoreVal = this.auxNonlinScore(time, scale, curve1, curve2);
       const posPoints = correct * maxPointsPerQuestion * auxScoreVal;
       let bonusPoints = 0;
 
-      if (this.aiMode) {
-        // Bonuspoints wenn AI-Vorhersage falsch und Spielerantwort korrekt
-        bonusPoints = (1-aiSuggestionCorrect) * correct * maxPointsPerQuestion * maxBonusProp * auxScoreVal;
-      }
-
+      // Bonuspoints wenn Frage schwer ist (Ki Vorhersage ist falsch)
+      bonusPoints = (1-aiSuggestionCorrect) * correct * maxPointsPerQuestion * maxBonusProp * auxScoreVal;
+      
       const points = posPoints + bonusPoints;
       return Math.max(points, 0);
     },
