@@ -480,6 +480,12 @@ function appData() {
       const s = Math.floor(seconds % 60);
       return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
     },
+
+    validateEmail() {
+      if (this.playerEmail.trim() === '') return "";
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailPattern.test(this.playerEmail) ? "" : "email-not-valid";
+    },
   };
 }
 window.appData = appData;

@@ -235,7 +235,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       </p>
       <!-- Formular für Name/Email -->
       <div class="form">
-        <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" @keydown.enter="$event.target.blur()"/>
+        <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" :class="validateEmail()" @keydown.enter="$event.target.blur()"/>
       </div>
       <div class="nav-div">
         <button class="start-btn" @click="backToStart()">Absenden &amp; zum Start!</button>
