@@ -33,11 +33,11 @@ function appData() {
     scatterHeight: 300,
     // Abteilungs-Liste mit Icons
     departments: [
-      { name: 'Personalabteilung', description: 'z.B. bei Bewerbungen und Personalfragen', icon: '👥' },
-      { name: 'Finanzabteilung', description: 'z.B. bei Rechnungen und Zahlungen', icon: '💰' },
-      { name: 'Rechtsabteilung', description: 'z.B. bei juristischen Fragen und Verträgen', icon: '⚖️' },
-      { name: 'Leitungsebene', description: 'z.B. bei strategischen Entscheidungen und Eskalationen', icon: '👔' },
-      { name: 'Kundenservice', description: 'z.B. bei allgemeinen Fragen und Beschwerden', icon: '🎧' }
+      { name: 'Personalabteilung', description: 'z.B. bei Bewerbungen, Zeugnissen, Beschäftigungsnachweisen, Personalfragen', icon: '👥' },
+      { name: 'Finanzabteilung', description: 'z.B. bei Rechnungen, Zahlungen, Erstattungen, Spenden- und Steuerbescheinigungen', icon: '💰' },
+      { name: 'Rechtsabteilung', description: 'z.B. bei Widersprüchen, Datenschutzfragen, rechtlichen Aufforderungen', icon: '⚖️' },
+      { name: 'Leitungsebene', description: 'z.B. bei Bürgeranliegen, strategischen Vorschlägen, Presse- und Politik-Kontakten, Einladungen', icon: '👔' },
+      { name: 'Kundenservice', description: 'z.B. bei allgemeinen Auskünften, Termin- und Formularservices, Änderungsmeldungen, Beschwerden', icon: '🎧' }
     ],
 
     // Initialisierung bei App-Start
