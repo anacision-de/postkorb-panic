@@ -59,6 +59,11 @@
   margin: 0.3em 0;
 }
 
+.email-not-valid {
+  background: rgb(135, 11, 11);
+  color: white;
+}
+
 .email-eval {
   margin: 0.9em 0;
 }
