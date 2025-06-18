@@ -34,16 +34,13 @@
   <div x-show="screen === 'start'" x-cloak class="screen start-screen">
     <div class="start-left">
       <img src="icon.svg" alt="Postkorb Panic">
-      <p>Der Postkorb ist voll, der Druck steigt — und die nächste Mail wartet schon.
-Gut, dass Sie nicht alleine sind: Eine KI steht bereit, um Ihnen Vorschläge zur Einsortierung zu machen. <strong> Doch aufgepasst: </strong> Sie meint es gut, aber trifft nicht immer ins Schwarze.</p>
-      <p>Sie haben die Wahl: <br>
-Vertrauen Sie der KI — oder entscheiden Sie selbst.
-<strong> Sortieren Sie clever, denken Sie schnell und behalten Sie den Überblick </strong>, wenn die E-Mails im Sekundentakt eintrudeln.
-
-Am Ende zählt nur eins: <strong> Wird Ihr Postkorb zur Erfolgsgeschichte — oder zur Panikzone? </strong></p>
-
+      <p><strong>Chaos im Posteingang? Keine Sorge – Sie haben Hilfe!</strong> <br>
+      Die Mails kommen im Sekundentakt, doch eine KI unterstützt Sie beim Sortieren. Vertrauen Sie ihrem Vorschlag – oder entscheiden Sie selbst.
+      Reagieren Sie schnell, bleiben Sie konzentriert und beweisen Sie Übersicht. <br>
+      <strong>Wird Ihr Postkorb zum Triumph – oder zur Panikzone?</strong>
+      </p>
       <div class="nav-div">
-        <p class="cta"> <strong> 👉 Jetzt starten und zeigen, wer hier den Überblick behält! </strong></p>
+        <p class="cta"> <strong> 👉 Jetzt starten und zeigen, wer hier die Übersicht behält! </strong></p>
         <button class="start-btn" @click="screen = 'setup'">Start</button>
       </div>
     </div>
@@ -109,8 +106,8 @@ Am Ende zählt nur eins: <strong> Wird Ihr Postkorb zur Erfolgsgeschichte — od
 Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<br> <strong> Sie treffen immer die letzte Entscheidung — aber ein kluger Vorschlag kann helfen! </strong></p>
         <p>
           Wählen Sie Ihren Spielmodus:<br>
-          <strong>✅ Mit KI-Hilfe:</strong> Die KI schlägt vor und markiert relevante Wörter, Sie sortieren. Die perfekte Unterstützung.<br>
-          <strong>❌ Ohne KI:</strong> Alles liegt in Ihrer Hand. Nur Sie, Ihr Verstand — und der Postkorb.
+          <strong>✅ Mit KI-Hilfe:</strong> Die KI schlägt vor und markiert relevante Wörter.<br>
+          <strong>❌ Ohne KI:</strong> Alles liegt in Ihrer Hand.
         </p>
         <label class="slider-label">
           KI-Unterstützung:
@@ -304,7 +301,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
 
         <div class="email-eval">
           <p><strong>Korrekte Abteilung:</strong> <span x-text="reviewDocs[reviewIndex]?.correctDept || '–'"></span></p>
-          <p><strong>Ihre Antwort:</strong> <span x-text="reviewDocs[reviewIndex].playerChoice"></span></p>
+          <p><strong>Ihre Antwort:</strong> <span x-text="reviewDocs[reviewIndex]?.playerChoice || '–'"></span></p>
           <p><strong>KI-Vorschlag:</strong> <span x-text="reviewDocs[reviewIndex]?.aiSuggestion || '–'"></span></p>
         </div>
 
