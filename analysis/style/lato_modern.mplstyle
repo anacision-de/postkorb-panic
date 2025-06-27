@@ -1,0 +1,42 @@
+# lato_modern.mplstyle
+
+# Font
+font.family: Lato
+font.size: 12
+
+# Axes
+axes.edgecolor: "#2e3440"
+axes.labelcolor: "#2e3440"
+axes.titlesize: 14
+axes.labelsize: 12
+axes.spines.top: False
+axes.spines.right: False
+axes.facecolor: white
+
+# Ticks
+xtick.color: "#2e3440"
+ytick.color: "#2e3440"
+
+# Grid
+grid.color: "#d3d3d3"
+grid.linestyle: --
+grid.linewidth: 0.5
+axes.grid: True
+
+# Lines and markers
+lines.linewidth: 2
+lines.markersize: 6
+
+# Color cycle (requires cycler package)
+axes.prop_cycle: cycler('color', ["#2e3440", "#5e81ac", "#a3be8c", "#88c0d0", "#b48ead", "#d08770", "#f5c400"])
+
+# Background
+figure.facecolor: white
+savefig.facecolor: white
+
+# Legend
+legend.frameon: False
+legend.fontsize: 10
+
+# Titles
+figure.titlesize: 16

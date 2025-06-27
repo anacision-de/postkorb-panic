@@ -7,3 +7,4 @@ model/zuko-model
 model/moderngbert-model
 feedback
 results
+analysis/.venv
