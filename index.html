@@ -222,17 +222,27 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       <p x-show="percentile !== null">
         Sie sind mit Ihrem Score besser als <strong x-text="percentile"></strong>% aller bisherigen Teilnehmenden!
       </p>
-      <p>
-        <strong>Wenn Sie möchten, dass auch Ihr Team vom Erlebnis Postkorb Panic profitiert, geben Sie einfach Ihre geschäftliche E-Mail-Adresse an. Wir senden Ihnen:</strong> <br>
-        🔗 Einen Zugang zur Onlineversion von Postkorb Panic — ideal für Schulungen, Teamtage oder interne Weiterbildungen. <br>
-        📄 Ein kompaktes Whitepaper mit den zentralen Erkenntnissen aus dem Spiel, inklusive Auswertungen zu Entscheidungsverhalten, Reaktionsgeschwindigkeit und KI-Nutzung. <br>
-        📊 Eine Übersicht der relevanten Metriken für Reflexion und Transfer in den Arbeitsalltag. <br>
-        <br>
-        <small>(Keine Werbemails — nur praxisrelevante Inhalte für Führung und KI-Nutzung.)</small>
-      </p>
-      <!-- Formular für Name/Email -->
-      <div class="form">
-        <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" :class="validateEmail()" @keydown.enter="$event.target.blur()"/>
+      <div 
+        x-data="{ show: window.location.hash === '#email' }" 
+        x-init="
+          window.addEventListener('hashchange', () => {
+            show = window.location.hash === '#email';
+          });
+        "
+        x-show="show"
+      >
+        <p>
+          <strong>Wenn Sie möchten, dass auch Ihr Team vom Erlebnis Postkorb Panic profitiert, geben Sie einfach Ihre geschäftliche E-Mail-Adresse an. Wir senden Ihnen:</strong> <br>
+          🔗 Einen Zugang zur Onlineversion von Postkorb Panic — ideal für Schulungen, Teamtage oder interne Weiterbildungen. <br>
+          📄 Ein kompaktes Whitepaper mit den zentralen Erkenntnissen aus dem Spiel, inklusive Auswertungen zu Entscheidungsverhalten, Reaktionsgeschwindigkeit und KI-Nutzung. <br>
+          📊 Eine Übersicht der relevanten Metriken für Reflexion und Transfer in den Arbeitsalltag. <br>
+          <br>
+          <small>(Keine Werbemails — nur praxisrelevante Inhalte für Führung und KI-Nutzung.)</small>
+        </p>
+        <!-- Formular für Name/Email -->
+        <div class="form">
+          <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" :class="validateEmail()" @keydown.enter="$event.target.blur()"/>
+        </div>
       </div>
       <div class="nav-div">
         <button class="start-btn" @click="backToStart()">Absenden &amp; zum Start!</button>
