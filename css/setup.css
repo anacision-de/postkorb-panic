@@ -1,3 +1,35 @@
+.introduction-container {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.9rem;
+}
+
+.introduction-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #4f4f4f;
+}
+
+.modal-content.instruction-modal {
+  width: 60%;
+  padding: 2rem;
+}
+
+.screenshot{
+  justify-content: center;
+  display: flex;
+}
+
+.screenshot-img {
+  max-width: 85%;
+}
+
+.underline-text {
+  text-decoration: underline;
+}
+
 .email-card-setup {
   background: #fff;
   color: #000;
