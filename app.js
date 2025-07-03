@@ -19,6 +19,7 @@ function appData() {
     rank: null,
     percentile: null,
     showDataModal: false,
+    showInstructionModal: false,
     rawDocs: [],
     docs: [],
     reviewDocs: [],
@@ -466,14 +467,6 @@ function appData() {
       URL.revokeObjectURL(url);
     },
 
-    // Admin: Datenanzeige via Passwort
-    promptAdmin() {
-      const pw = prompt("Passwort eingeben:");
-      if (pw === "anacision") {
-        this.showDataModal = true;
-      }
-    },
-
     // Hilfsfunktionen
     formatTime(seconds) {
       const m = Math.floor(seconds / 60);
@@ -485,6 +478,19 @@ function appData() {
       if (this.playerEmail.trim() === '') return "";
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailPattern.test(this.playerEmail) ? "" : "email-not-valid";
+    },
+
+    // Admin: Datenanzeige via Passwort
+    promptAdmin() {
+      const pw = prompt("Passwort eingeben:");
+      if (pw === "anacision") {
+        this.showDataModal = true;
+      }
+    },
+
+    // Ausführliche Anleitung anzeigen
+    openInstructions() {
+      this.showInstructionModal = true;
     },
   };
 }

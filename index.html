@@ -122,7 +122,14 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
     <div class="start-right">
       <h2>So funktioniert das Spiel</h2>
       <p>Sie sehen eine eingehende E-Mail und entscheiden, an welche Abteilung sie weitergeleitet werden soll. Wählen Sie dazu die korrekte Abteilung unterhalb der E-Mail aus, an die die E-Mail weitergeleitet werden soll. Je schneller Sie die E-Mail korrekt zuordnen, desto mehr Punkte bekommen Sie.</p>
-      
+      <!-- Ausführliche Anleitung -->
+      <div class="introduction-container">
+        <span>Noch Fragen? Hier eine ausführliche </span>
+        <button class="introduction-btn" @click="openInstructions()">
+          <span class="underline-text">Anleitung.</span>
+        </button>
+      </div>
+      <!-- Beispiel Email -->
       <h3>Beispiel</h3>
       <div class="email-card-setup">
         <div class="email-meta">
@@ -222,17 +229,27 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       <p x-show="percentile !== null">
         Sie sind mit Ihrem Score besser als <strong x-text="percentile"></strong>% aller bisherigen Teilnehmenden!
       </p>
-      <p>
-        <strong>Wenn Sie möchten, dass auch Ihr Team vom Erlebnis Postkorb Panic profitiert, geben Sie einfach Ihre geschäftliche E-Mail-Adresse an. Wir senden Ihnen:</strong> <br>
-        🔗 Einen Zugang zur Onlineversion von Postkorb Panic — ideal für Schulungen, Teamtage oder interne Weiterbildungen. <br>
-        📄 Ein kompaktes Whitepaper mit den zentralen Erkenntnissen aus dem Spiel, inklusive Auswertungen zu Entscheidungsverhalten, Reaktionsgeschwindigkeit und KI-Nutzung. <br>
-        📊 Eine Übersicht der relevanten Metriken für Reflexion und Transfer in den Arbeitsalltag. <br>
-        <br>
-        <small>(Keine Werbemails — nur praxisrelevante Inhalte für Führung und KI-Nutzung.)</small>
-      </p>
-      <!-- Formular für Name/Email -->
-      <div class="form">
-        <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" :class="validateEmail()" @keydown.enter="$event.target.blur()"/>
+      <div 
+        x-data="{ show: window.location.hash === '#email' }" 
+        x-init="
+          window.addEventListener('hashchange', () => {
+            show = window.location.hash === '#email';
+          });
+        "
+        x-show="show"
+      >
+        <p>
+          <strong>Wenn Sie möchten, dass auch Ihr Team vom Erlebnis Postkorb Panic profitiert, geben Sie einfach Ihre geschäftliche E-Mail-Adresse an. Wir senden Ihnen:</strong> <br>
+          🔗 Einen Zugang zur Onlineversion von Postkorb Panic — ideal für Schulungen, Teamtage oder interne Weiterbildungen. <br>
+          📄 Ein kompaktes Whitepaper mit den zentralen Erkenntnissen aus dem Spiel, inklusive Auswertungen zu Entscheidungsverhalten, Reaktionsgeschwindigkeit und KI-Nutzung. <br>
+          📊 Eine Übersicht der relevanten Metriken für Reflexion und Transfer in den Arbeitsalltag. <br>
+          <br>
+          <small>(Keine Werbemails — nur praxisrelevante Inhalte für Führung und KI-Nutzung.)</small>
+        </p>
+        <!-- Formular für Name/Email -->
+        <div class="form">
+          <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" :class="validateEmail()" @keydown.enter="$event.target.blur()"/>
+        </div>
       </div>
       <div class="nav-div">
         <button class="start-btn" @click="backToStart()">Absenden &amp; zum Start!</button>
@@ -329,6 +346,57 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       </div>
     </div>
   </div>
+
+  <!-- Modal mit Anleitung-->
+  <div class="modal" x-show="showInstructionModal" @keydown.escape.window="showInstructionModal = false" @click.outside="showInstructionModal = false" x-cloak>
+  <div class="modal-content instruction-modal">
+    <h3>
+      📝 Anleitung für Postkorb Panic
+      <button @click="showInstructionModal = false" class="close-btn">×</button>
+    </h3>
+
+    <h4>📬 Willkommen im E-Mail-Dschungel!</h4>
+    <p>Der Postkorb quillt über, die Anfragen rauschen rein und Sie stecken mittendrin.
+      Ihr Auftrag: Schnell und clever die eingehenden E-Mails an die richtige Abteilung weiterleiten. Doch Achtung: Je länger Sie zögern, desto mehr Punkte entgehen Ihnen! 😱
+    </p>
+    <p>Für alle, die es ganz genau wissen wollen (Respekt für die Gründlichkeit! 🧐), kommt hier die ausführliche Anleitung.</p>
+
+    <h4>🎮 Vorbereitung</h4>
+    <p>Bevor es losgeht, brauchen Sie einen Spielernamen — kreativ, klassisch oder chaotisch, alles ist erlaubt. Am Ende landet Ihr Name in der Bestenliste 🏆 (natürlich nur lokal — der Datenschutz schläft nie!). </p>
+    <p>Optional, aber smart: Aktivieren Sie die KI-Unterstützung 🤖.
+      Sie wurde auf ähnlichen E-Mails trainiert und schlägt Ihnen bei jeder E-Mail eine passende Abteilung vor, inklusive farblich markierter Schlüsselwörter. Aber Vorsicht: Die KI gibt ihr Bestes, liegt aber nicht immer richtig. Wenn Sie mutig selbst entscheiden und richtig liegen, wird ihr Score für diese E-Mail verdoppelt! 💡</p>
+
+    <h4>🎯 Ziel des Spiels</h4>
+    <p>Zehn E-Mails, zehn Entscheidungen und ein nervöser Zeigefinger. Ihre Aufgabe ist es, jede Nachricht blitzschnell der richtigen Abteilung zuzuordnen. Das hier sehen Sie nachher im Spiel:</p>
+    <div class="screenshot">
+        <img src="./images/game_screenshot.png" alt="game_screenshot" class="screenshot-img" />
+      </div>
+    <p>Oben im Spielbereich laufen dabei permanent die Uhr ⏱️ und Ihr aktueller Punktestand ⭐ mit. Direkt darunter zeigt Ihnen ein Fortschrittsbalken, wie viele E-Mails Sie bereits hinter Ihnen haben oder ob der Wahnsinn gerade erst beginnt. Im Zentrum steht die jeweils aktuelle E-Mail, und am unteren Rand warten die fünf Abteilungen nur darauf, von Ihnen ausgewählt zu werden. Aber Achtung: Ein Klick ist endgültig und es gibt kein Zurück! Und kaum ist eine Mail weg, kommt schon die nächste hereingeflattert. 📨💨 </p>
+    
+
+    <h4>🧠 Punktesystem</h4>
+    <ul>
+      <li>🔹 Richtige Weiterleitung? ✔️ Bis zu 10 Punkte</li>
+      <li>🔹 Falsche Weiterleitung? ❌ Leider null Punkte</li>
+      <li>🔹 Schwierige E-Mail korrekt einsortiert? 💎 Doppelte Punkte!</li>
+    </ul>
+
+    <h4>🏢 Die Abteilungen im Überblick:</h4>
+    <ul>
+      <li>👥 <strong>Personalabteilung:</strong> : Zuständig bei Bewerbungen, Zeugnisse, Personalfragen, Beschäftigungsnachweise</li>
+      <li>💰 <strong>Finanzabteilung:</strong> Zuständig bei Rechnungen, Erstattungen, Spendenbescheinigungen, Zahlungen</li>
+      <li>⚖️ <strong>Rechtsabteilung:</strong> Zuständig bei Widersprüchen, Datenschutzthemen, rechtlichen Aufforderungen</li>
+      <li>🧠 <strong>Leitungsebene:</strong> Zuständig bei strategischen Themen, Bürgeranliegen, Pressekontakten, Einladungen </li>
+      <li>📞 <strong>Kundenservice:</strong> Zuständig bei Auskünften, Terminen, Formularen, Beschwerden </li>
+    </ul>
+
+    <p>👉 Tippen Sie einfach auf die passende Abteilung und ab geht die Post. Überlegen Sie gut: Ein Klick, keine Korrektur!</p>
+
+    <h4>📊 Nach der Runde: Ihre Ergebnisse</h4>
+    <p>Geschafft! Jetzt dürfen Sie tief durchatmen und zurückblicken. Im Auswertungsbereich können Sie ganz in Ruhe prüfen, wie Sie sich geschlagen haben. Sie sehen für jede einzelne E-Mail, ob Ihre Entscheidung korrekt war, wie die korrekte Abteilung lautet und was die KI Ihnen empfohlen hätte. Selbst wenn Sie ohne KI gespielt haben, bekommen Sie einen Einblick in ihre Vorschläge. </p>
+    <p>Und natürlich wartet da auch die Bestenliste: Wo landen Sie im Vergleich zu anderen? Nur Ihr Gerät kennt die Antwort, denn die Liste bleibt lokal gespeichert. Nicht ganz oben? Kein Problem. Der Postkorb füllt sich gleich wieder. Bereit für die nächste Runde? 🕹️📬</p>
+  </div>
+</div>
 
 </body>
 </html>
