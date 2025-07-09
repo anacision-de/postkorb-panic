@@ -251,8 +251,19 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
           <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" :class="validateEmail()" @keydown.enter="$event.target.blur()"/>
         </div>
       </div>
-      <div class="nav-div">
-        <button class="start-btn" @click="backToStart()">Absenden &amp; zum Start!</button>
+      <div
+        x-data="{ show: window.location.hash === '#email' }"
+        x-init="
+          window.addEventListener('hashchange', () => {
+            show = window.location.hash === '#email';
+          });
+        "
+      >
+        <div class="nav-div">
+          <button class="start-btn" @click="backToStart()"
+                  x-text="show ? 'Absenden & zum Start!' : 'Zurück zum Start!'">
+          </button>
+        </div>
       </div>
     </div>
     <div class="start-right">
