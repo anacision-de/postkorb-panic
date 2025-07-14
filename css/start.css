@@ -160,6 +160,12 @@
   color: #FDE603;
 }
 
+.impressum {
+  color: #666;
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+
 @media (max-width: 1920px) {
   .leaderboard th, .leaderboard td {
     font-size: 1.2rem;
