@@ -87,8 +87,9 @@
           </svg>
         </div>
       </div>
-      <div class="logo" @click="promptAdmin()">
-        <img src="./images/logo_schwarz.png" alt="Logo" class="logo-img" />
+      <div class="logo">
+        <img @click="promptAdmin()" src="./images/logo_schwarz.png" alt="anacision Logo" class="logo-img" /><br>
+        <a class="impressum" href="https://www.anacision.de/de/impressum">Impressum</a>
       </div>
     </div>
   </div>
@@ -155,7 +156,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
         </div>
       </div>
       <div class="logo">
-        <img src="./images/logo_schwarz.png" alt="Logo" class="logo-img" />
+        <img src="./images/logo_schwarz.png" alt="anacision Logo" class="logo-img" />
       </div>
     </div>
   </div>
@@ -251,8 +252,19 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
           <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" :class="validateEmail()" @keydown.enter="$event.target.blur()"/>
         </div>
       </div>
-      <div class="nav-div">
-        <button class="start-btn" @click="backToStart()">Absenden &amp; zum Start!</button>
+      <div
+        x-data="{ show: window.location.hash === '#email' }"
+        x-init="
+          window.addEventListener('hashchange', () => {
+            show = window.location.hash === '#email';
+          });
+        "
+      >
+        <div class="nav-div">
+          <button class="start-btn" @click="backToStart()"
+                  x-text="show ? 'Absenden & zum Start!' : 'Zurück zum Start!'">
+          </button>
+        </div>
       </div>
     </div>
     <div class="start-right">
@@ -331,7 +343,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
         </div>
       </div>
       <div class="logo">
-        <img src="./images/logo_schwarz.png" alt="Logo" class="logo-img" />
+        <img src="./images/logo_schwarz.png" alt="anacision Logo" class="logo-img" />
       </div>
     </div>
   </div>
