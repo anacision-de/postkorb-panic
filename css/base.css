@@ -13,7 +13,7 @@ html {
 body.app {
   margin: 0;
   padding: 0;
-  background: #f0f0f0;
+  background: #444;
   color: #000;
   touch-action: manipulation; /* improved touch responsiveness */
 }
@@ -97,7 +97,10 @@ input[type="email"] {
 /* Modal (Admin Data Overlay) */
 .modal {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(54, 60, 72, 0.6);
   display: flex;
   align-items: center;
@@ -136,14 +139,15 @@ input[type="email"] {
 
 /* Global layout container */
 .screen {
+  margin: 0 auto;
   height: 100dvh;
-  width: 100dvw;
+  width: min(100dvw, 2500px);
 }
 
 /* Logo image */
 .logo-img {
   width: clamp(200px, 20%, 400px);
   height: auto;
-  margin: 0.1em;
+  margin: 0.1rem;
   object-fit: contain;
 }

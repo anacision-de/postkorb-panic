@@ -11,7 +11,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 2em;
+  padding: 2rem;
   height: 100%;
 }
 .start-left {
@@ -33,7 +33,6 @@
   flex: 1 1 65%;
   min-width: 400px;
   overflow: auto;
-  border-radius: 0 8px 8px 0;
 }
 
 /* Toggle switch for KI mode (Setup screen) */
@@ -85,7 +84,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 1em;
+  gap: 1rem;
   justify-content: center;
   text-align: center;
   flex-direction: column;
@@ -169,5 +168,31 @@
 @media (max-width: 1920px) {
   .leaderboard th, .leaderboard td {
     font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 950px) {
+  .start-left {
+    width: 100%;
+    height: auto;
+    padding: 0.5rem;
+  }
+
+  .start-right {
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    overflow-x: auto;
+    padding: 0.5rem;
+  }
+
+  .leaderboard {
+    width: 100%;
+    font-size: 1rem !important;
+    margin: 0;
+  }
+
+  .leaderboard th, .leaderboard td {
+    font-size: 0.8rem !important;
   }
 }

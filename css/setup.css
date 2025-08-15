@@ -1,7 +1,4 @@
 .introduction-container {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
   margin-bottom: 0.9rem;
 }
 
@@ -50,5 +47,16 @@
   border: none;
   cursor: pointer;
   color: #ccc;
-  margin-top: 1em;
+  margin-top: 1rem;
+}
+
+@media (max-width: 950px) {
+  .modal-content.instruction-modal {
+    width: 95%;
+    padding: 1rem;
+  }
+
+  .email-card-setup {
+    padding: 1rem;
+  }
 }

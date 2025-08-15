@@ -34,14 +34,14 @@
   <div x-show="screen === 'start'" x-cloak class="screen start-screen">
     <div class="start-left">
       <img src="icon.svg" alt="Postkorb Panic">
-      <p><strong>Chaos im Posteingang? Keine Sorge – Sie haben Hilfe!</strong> <br>
-      Die Mails kommen im Sekundentakt, doch eine KI unterstützt Sie beim Sortieren. Vertrauen Sie ihrem Vorschlag – oder entscheiden Sie selbst.
+      <p><strong>Chaos im Posteingang? Keine Sorge — Sie haben Hilfe!</strong> <br>
+      Die Mails kommen im Sekundentakt, doch eine KI unterstützt Sie beim Sortieren. Vertrauen Sie ihrem Vorschlag — oder entscheiden Sie selbst.
       Reagieren Sie schnell, bleiben Sie konzentriert und beweisen Sie Übersicht. <br>
-      <strong>Wird Ihr Postkorb zum Triumph – oder zur Panikzone?</strong>
+      <strong>Wird Ihr Postkorb zum Triumph — oder zur Panikzone?</strong>
       </p>
       <div class="nav-div">
         <p class="cta"> <strong> 👉 Jetzt starten und zeigen, wer hier die Übersicht behält! </strong></p>
-        <button class="start-btn" @click="screen = 'setup'">Start</button>
+        <button class="start-btn" @click="screen = 'setup'; window.scrollTo(0, 0);">Start</button>
       </div>
     </div>
     <!-- Rechte Seite: Bestenliste & Statistik -->
@@ -58,7 +58,7 @@
           <template x-for="(entry, idx) in leaderboard" :key="idx">
             <tr>
               <td x-text="idx+1"></td>
-              <td x-text="entry.name ?? '–'"></td>
+              <td x-text="entry.name ?? '—'"></td>
               <td x-text="formatTime(entry.totalTime)"></td>
               <td x-text="entry.correct"></td>
               <td x-text="entry.score.toFixed(1)"></td>
@@ -125,10 +125,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       <p>Sie sehen eine eingehende E-Mail und entscheiden, an welche Abteilung sie weitergeleitet werden soll. Wählen Sie dazu die korrekte Abteilung unterhalb der E-Mail aus, an die die E-Mail weitergeleitet werden soll. Je schneller Sie die E-Mail korrekt zuordnen, desto mehr Punkte bekommen Sie.</p>
       <!-- Ausführliche Anleitung -->
       <div class="introduction-container">
-        <span>Noch Fragen? Hier eine ausführliche </span>
-        <button class="introduction-btn" @click="openInstructions()">
-          <span class="underline-text">Anleitung.</span>
-        </button>
+        <span>Noch Fragen? Hier eine ausführliche <span class="underline-text introduction-btn" @click="openInstructions()">Anleitung.</span></span>
       </div>
       <!-- Beispiel Email -->
       <h3>Beispiel</h3>
@@ -313,7 +310,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
               <tr :class="{correct: doc.userAnswer === doc.correctDept, wrong: doc.userAnswer !== doc.correctDept}">
                 <td x-text="i+1"></td>
                 <td x-text="doc.correctDept"></td>
-                <td x-text="doc.userAnswer ?? '–'"></td>
+                <td x-text="doc.userAnswer ?? '—'"></td>
                 <td x-text="doc.aiSuggestion"></td>
                 <td x-text="(doc.currentScore ?? 0).toFixed(1)"></td>
               </tr>
@@ -329,9 +326,9 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
         </div>
 
         <div class="email-eval">
-          <p><strong>Korrekte Abteilung:</strong> <span x-text="reviewDocs[reviewIndex]?.correctDept || '–'"></span></p>
-          <p><strong>Ihre Antwort:</strong> <span x-text="reviewDocs[reviewIndex]?.playerChoice || '–'"></span></p>
-          <p><strong>KI-Vorschlag:</strong> <span x-text="reviewDocs[reviewIndex]?.aiSuggestion || '–'"></span></p>
+          <p><strong>Korrekte Abteilung:</strong> <span x-text="reviewDocs[reviewIndex]?.correctDept || '—'"></span></p>
+          <p><strong>Ihre Antwort:</strong> <span x-text="reviewDocs[reviewIndex]?.playerChoice || '—'"></span></p>
+          <p><strong>KI-Vorschlag:</strong> <span x-text="reviewDocs[reviewIndex]?.aiSuggestion || '—'"></span></p>
         </div>
 
         <div class="doc-card">

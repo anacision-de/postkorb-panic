@@ -96,6 +96,9 @@ function appData() {
       this.timerInterval = setInterval(() => {
         this.timeElapsed = Math.round((this.timeElapsed + 0.1) * 100) / 100;
       }, 100);
+
+      // scroll back to top on mobile; on desktop, this has no effect
+      window.scrollTo(0, 0);
     },
 
     highlightedHtml(html) {
@@ -187,8 +190,12 @@ function appData() {
     scrollEmailToTop() {
       // Delay to ensure DOM update from currentDoc
       this.$nextTick(() => {
+        // desktop version: scroll the container with the emails to top
         const el = document.querySelector('.game-screen .card-stack');
         if (el) el.scrollTop = 0;
+
+        // mobile version: scroll whole website to top
+        window.scrollTo(0, 0);
       });
     },
 
@@ -255,6 +262,9 @@ function appData() {
       }
       // Wechsel zum Ergebnis-Screen
       this.screen = 'result';
+
+      // scroll back to top on mobile; on desktop, this has no effect
+      window.scrollTo(0, 0);
     },
 
     prevDoc() {
@@ -329,6 +339,9 @@ function appData() {
       this.resetGame();
       this.generateScatterPlot();
       this.screen = "start";
+
+      // scroll back to top on mobile; on desktop, this has no effect
+      window.scrollTo(0, 0);
     },
 
     calculateQuantile(arr, q) {
@@ -457,7 +470,7 @@ function appData() {
       // Konvertiere resultsList zu JSON string
       const jsonContent = JSON.stringify(this.resultsList, null, 2); 
 
-      // Erzeuge einen Blob aund starte den Download
+      // Erzeuge einen Blob und starte den Download
       const blob = new Blob([jsonContent], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
