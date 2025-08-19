@@ -205,7 +205,8 @@
   }
 
   .game-status {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .abort-btn {

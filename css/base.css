@@ -151,3 +151,8 @@ input[type="email"] {
   margin: 0.1rem;
   object-fit: contain;
 }
+
+.game-logo{
+  width: 100%;
+  max-width: 400px;
+} 

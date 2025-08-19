@@ -33,7 +33,7 @@
   <!-- Start Screen -->
   <div x-show="screen === 'start'" x-cloak class="screen start-screen">
     <div class="start-left">
-      <img src="icon.svg" alt="Postkorb Panic">
+      <img class="game-logo" src="icon.svg" alt="Postkorb Panic">
       <p><strong>Chaos im Posteingang? Keine Sorge — Sie haben Hilfe!</strong> <br>
       Die Mails kommen im Sekundentakt, doch eine KI unterstützt Sie beim Sortieren. Vertrauen Sie ihrem Vorschlag — oder entscheiden Sie selbst.
       Reagieren Sie schnell, bleiben Sie konzentriert und beweisen Sie Übersicht. <br>
@@ -97,7 +97,7 @@
   <!-- Erklärung/Setup Screen -->
   <div x-show="screen === 'setup'" x-transition class="screen start-screen">
     <div class="start-left">
-      <img src="icon.svg" alt="Postkorb Panic">
+      <img class="game-logo" src="icon.svg" alt="Postkorb Panic">
       <h2>Bereit für Postkorb Panic?</h2>
       <p>Bevor es losgeht — wie dürfen wir Sie nennen?</p>
       <input type="text" placeholder="Spielername" x-model="playerName" @keydown.enter="$event.target.blur()"/>
@@ -217,7 +217,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
   <!-- Ergebnis (Result) Screen -->
   <div x-show="screen === 'result'" x-transition class="screen start-screen">
     <div class="start-left">
-      <img src="icon.svg" alt="Postkorb Panic">
+      <img class="game-logo" src="icon.svg" alt="Postkorb Panic">
       <h2>Geschafft! 😊</h2>
       <div class="result-values">
         <p x-show="currentResult">⏱️ Benötigte Zeit: <strong x-text="formatTime(timeElapsed)"></strong></p>
