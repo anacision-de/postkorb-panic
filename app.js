@@ -1,3 +1,32 @@
+const HASH_STORAGE_KEY = 'postkorb-preferred-hash';
+
+(function managePreferredHash() {
+  try {
+    const storedHash = localStorage.getItem(HASH_STORAGE_KEY);
+    const displayStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    const isStandalone = displayStandalone || window.navigator.standalone === true;
+
+    if (isStandalone && !window.location.hash && storedHash) {
+      const url = new URL(window.location.href);
+      url.hash = storedHash;
+      history.replaceState(null, '', url);
+    }
+
+    const persistHash = () => {
+      if (window.location.hash) {
+        localStorage.setItem(HASH_STORAGE_KEY, window.location.hash);
+      } else {
+        localStorage.removeItem(HASH_STORAGE_KEY);
+      }
+    };
+
+    persistHash();
+    window.addEventListener('hashchange', persistHash);
+  } catch (error) {
+    console.warn('Preferred hash storage unavailable:', error);
+  }
+})();
+
 function appData() {
   return {
     // State variables
