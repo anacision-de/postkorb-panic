@@ -228,15 +228,7 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
       <p x-show="percentile !== null">
         Sie sind mit Ihrem Score besser als <strong x-text="percentile"></strong>% aller bisherigen Teilnehmenden!
       </p>
-      <div 
-        x-data="{ show: window.location.hash === '#email' }" 
-        x-init="
-          window.addEventListener('hashchange', () => {
-            show = window.location.hash === '#email';
-          });
-        "
-        x-show="show"
-      >
+      <div x-show="showEmailForm">
         <p>
           <strong>Wenn Sie möchten, dass auch Ihr Team vom Erlebnis Postkorb Panic profitiert, geben Sie einfach Ihre geschäftliche E-Mail-Adresse an. Wir senden Ihnen:</strong> <br>
           🔗 Einen Zugang zur Onlineversion von Postkorb Panic — ideal für Schulungen, Teamtage oder interne Weiterbildungen. <br>
@@ -250,19 +242,10 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
           <input type="email" placeholder="E-Mail Adresse" x-model.trim="playerEmail" :class="validateEmail()" @keydown.enter="$event.target.blur()"/>
         </div>
       </div>
-      <div
-        x-data="{ show: window.location.hash === '#email' }"
-        x-init="
-          window.addEventListener('hashchange', () => {
-            show = window.location.hash === '#email';
-          });
-        "
-      >
-        <div class="nav-div">
-          <button class="start-btn" @click="backToStart()"
-                  x-text="show ? 'Absenden & zum Start!' : 'Zurück zum Start!'">
-          </button>
-        </div>
+      <div class="nav-div">
+        <button class="start-btn" @click="backToStart()"
+                x-text="showEmailForm ? 'Absenden & zum Start!' : 'Zurück zum Start!'">
+        </button>
       </div>
     </div>
     <div class="start-right">
@@ -351,6 +334,12 @@ Unsere KI steht bereit, Ihnen bei der E-Mail-Sortierung Vorschläge zu machen.<b
     <div class="modal-content">
       <h3>Gespeicherte Daten <button @click="showDataModal=false" class="close-btn">×</button></h3>
       <p><em>Zum Herunterladen der Daten auf den Button klicken</em></p>
+      <div class="setting">
+        <label class="checkbox-label">
+          <input type="checkbox" x-model="showEmailForm" @change="persistEmailFormSetting()">
+          E-Mail-Formular auf Ergebnis-Seite anzeigen
+        </label>
+      </div>
       <div class="nav-div">
         <button class=start-btn @click="downloadJSON()">JSON herunterladen</button>
       </div>

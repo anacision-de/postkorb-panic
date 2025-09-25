@@ -1,31 +1,4 @@
-const HASH_STORAGE_KEY = 'postkorb-preferred-hash';
-
-(function managePreferredHash() {
-  try {
-    const storedHash = localStorage.getItem(HASH_STORAGE_KEY);
-    const displayStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    const isStandalone = displayStandalone || window.navigator.standalone === true;
-
-    if (isStandalone && !window.location.hash && storedHash) {
-      const url = new URL(window.location.href);
-      url.hash = storedHash;
-      history.replaceState(null, '', url);
-    }
-
-    const persistHash = () => {
-      if (window.location.hash) {
-        localStorage.setItem(HASH_STORAGE_KEY, window.location.hash);
-      } else {
-        localStorage.removeItem(HASH_STORAGE_KEY);
-      }
-    };
-
-    persistHash();
-    window.addEventListener('hashchange', persistHash);
-  } catch (error) {
-    console.warn('Preferred hash storage unavailable:', error);
-  }
-})();
+const EMAIL_FORM_STORAGE_KEY = 'postkorb-email-form-enabled';
 
 function appData() {
   return {
@@ -49,6 +22,7 @@ function appData() {
     percentile: null,
     showDataModal: false,
     showInstructionModal: false,
+    showEmailForm: false,
     rawDocs: [],
     docs: [],
     reviewDocs: [],
@@ -82,6 +56,13 @@ function appData() {
       // Daten aus localStorage laden (falls vorhanden)
       const all = localStorage.getItem('resultsList');
       this.resultsList = all ? JSON.parse(all) : [];
+      try {
+        const storedEmailForm = localStorage.getItem(EMAIL_FORM_STORAGE_KEY);
+        this.showEmailForm = storedEmailForm === 'true';
+      } catch (error) {
+        console.warn('Email form preference unavailable:', error);
+        this.showEmailForm = false;
+      }
       // Bestenliste initialisieren
       this.updateLeaderboard();
       // Beispiel-Dokument für Vorschau im Setup-Screen generieren
@@ -398,6 +379,14 @@ function appData() {
       this.generateCircles();
       this.generateTicks();
       this.generateGrid();
+    },
+
+    persistEmailFormSetting() {
+      try {
+        localStorage.setItem(EMAIL_FORM_STORAGE_KEY, this.showEmailForm ? 'true' : 'false');
+      } catch (error) {
+        console.warn('Unable to store email form preference:', error);
+      }
     },
 
     // Streudiagramm: Datenpunkte (SVG <circle>) generieren
