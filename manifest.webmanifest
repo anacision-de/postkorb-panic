@@ -1,0 +1,17 @@
+{
+  "name": "Postkorb Panic",
+  "short_name": "Postkorb Panic",
+  "description": "Sortiere eingehende E-Mails blitzschnell — mit oder ohne KI-Unterstützung.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#444444",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ]
+}
